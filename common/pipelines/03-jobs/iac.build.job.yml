@@ -1,0 +1,49 @@
+parameters:
+  - name: workloadSettings
+    type: object
+
+jobs:
+
+  - job: ${{ variables.workload }}_build
+    variables: 
+      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+    
+    displayName: Building IaC Artifacts
+      
+    steps:
+      - checkout: self
+
+      - task: CopyFiles@2
+        displayName: Copying Workload content
+        inputs:
+          SourceFolder: workloads/$(landingZoneType)/$(designArea)$(applicationLandingZone)/$(workload)
+          Contents: |
+            **
+            !tests/**
+            !examples/**
+          TargetFolder: $(build.artifactstagingdirectory)/$(workload)
+          flattenFolders: false
+
+      - task: CopyFiles@2
+        displayName: Copying common content
+        inputs:
+          SourceFolder: common
+          Contents: |
+            **
+            !tests/**
+            !examples/**
+            !pipelines/**
+          TargetFolder: $(build.artifactstagingdirectory)/common
+          flattenFolders: false
+      
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(build.artifactstagingdirectory)/$(workload)
+          artifact: $(workload)
+          publishLocation: pipeline
+      
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(build.artifactstagingdirectory)/common
+          artifact: common
+          publishLocation: pipeline

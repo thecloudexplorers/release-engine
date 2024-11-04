@@ -1,0 +1,14 @@
+parameters:
+  - name: workloadSettings
+    type: object
+
+stages:
+
+  - template: /common/pipelines/02-stages/iac.build.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+
+  - template: /common/pipelines/02-stages/iac.deploy.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+  
