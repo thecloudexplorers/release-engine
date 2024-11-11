@@ -1,0 +1,19 @@
+parameters:
+  - name: workloadSettings
+    type: object
+
+variables:
+  - name: serviceConnection
+    value: ServiceConnection
+  - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+
+stages:
+
+  - template: /pipelines/02-stages/iac.build.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+
+  - template: /pipelines/02-stages/iac.deploy.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+  

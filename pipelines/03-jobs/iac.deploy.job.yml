@@ -1,0 +1,102 @@
+parameters:
+  - name: workloadSettings
+    type: object
+  - name: jobSettings
+    type: object
+
+
+
+jobs:
+  - deployment: workload_deployment #TODO: parametrize
+    displayName: Azure Deployment
+    environment: ${{ parameters.jobSettings.environment }}    
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+            - ${{ if ne(parameters.workloadSettings.deploymentScript, '') }}:            
+                  - ${{ each script in parameters.workloadSettings.deploymentScript }}:
+                    
+                    - task: AzurePowerShell@5
+                      name: deploy_azure_powershell_${{ script.name }}
+                      displayName: Runnin script ${{ script.name }}
+                      inputs:                    
+                        pwsh: true
+                        azureSubscription: $(serviceConnection)
+                        ScriptType: FilePath
+                        ScriptPath: $(Pipeline.Workspace)/$(workload)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        azurePowerShellVersion: LatestVersion
+                        ScriptArguments: ${{ parameters.workloadSettings.deploymentScript.arguments }}
+                        workingDirectory: $(Pipeline.Workspace)    
+      # jobs:
+#   - deployment: workload_deployment #TODO: parametrize
+#     displayName: Azure Deployment
+#     environment: ${{ parameters.jobSettings.environment }}    
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+
+#             # - task: DownloadBuildArtifacts@1
+#             #   inputs:
+#             #     buildType: current
+#             #     downloadType: single
+#             #     artifactName: artifacts
+#             #     downloadPath: $(System.ArtifactsDirectory)
+
+#             - powershell: |
+#                 Get-ChildItem  $(Pipeline.Workspace) -Recurse
+
+#             - ${{ if ne(parameters.workloadSettings.deploymentScript, '') }}:            
+#               - ${{ each script in parameters.workloadSettings.deploymentScript }}:
+                
+#                 - task: AzurePowerShell@5
+#                   name: deploy_azure_powershell
+#                   displayName: Deploy Azure PowerShell
+#                   inputs:                    
+#                     pwsh: true
+#                     azureSubscription: $(serviceConnection)
+#                     ScriptType: FilePath
+#                     # ScriptPath: $(System.ArtifactsDirectory)/artifacts/resources/powershell/controllers/deployBicep.ps1
+#                     ScriptPath: /$(workload)/scripts/${{ script.name }}
+#                     azurePowerShellVersion: LatestVersion
+#                     # ${{ if ne(script.arguments, '') }}:
+#                     ScriptArguments: ${{ parameters.workloadSettings.deploymentScript.arguments }}
+#                     workingDirectory: $(Pipeline.Workspace)
+                    
+                    
+
+            # - task: AzurePowerShell@5
+            #     name: deploy_bicep_task
+            #     displayName: 'Deploy Bicep'
+            #     inputs:
+            #       pwsh: true
+            #       azureSubscription: '$(serviceConnection)'
+            #       ScriptType: 'FilePath'
+            #       ScriptPath: '$(System.ArtifactsDirectory)/artifacts/resources/powershell/controllers/deployBicep.ps1'
+            #       azurePowerShellVersion: 'LatestVersion'
+            #       ScriptArguments: >-
+            #         -TemplateFilePath "$(IaCMainFilePath)"
+            #         -ResourceLocation "$(ResourceLocation)"
+            #         -SolutionName "observability-solution"
+            #         -CustomBicepParameters @{resourceGroupName="$(LogAnalyticsWorkspaceResourceGroup)"; resourceLocation="$(ResourceLocation)"; workspaceName="$(LogAnalyticsWorkspaceName)"}  
+
+             
+            
+            # - task: AzureResourceManagerTemplateDeployment@3
+            #   displayName: Creating Resource Group '${{ parameters.resource.name }}' by IaC
+            #   inputs:
+            #     deploymentScope: 'Subscription'
+            #     azureResourceManagerConnection: '${{ parameters.settings.azure.subscription.serviceConnection }}'
+            #     subscriptionId: ${{ parameters.settings.azure.subscription.subscriptionId }}
+            #     action: 'Create Or Update Resource Group'
+            #     resourceGroupName: ${{ parameters.settings.azure.resourceGroup.name }}
+            #     location: ${{ parameters.settings.azure.resourceGroup.location }}
+            #     templateLocation: 'Linked artifact'
+            #     csmFile: '$(Pipeline.Workspace)/${{ parameters.resource.type }}/infrastructure/${{ parameters.resource.type }}-iac.json'
+            #     overrideParameters: >
+            #       -resourceGroupName ${{ parameters.resource.name }}
+            #       -resourceGroupLocation ${{ parameters.settings.azure.resourceGroup.location }}
+            #     deploymentMode: 'Incremental'
+            #     deploymentOutputs: 'ArmOutputs'

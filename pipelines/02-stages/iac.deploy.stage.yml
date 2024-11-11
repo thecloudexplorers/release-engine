@@ -1,0 +1,21 @@
+parameters:
+  - name: workloadSettings
+    type: object
+
+stages:
+  
+  - ${{ each env in parameters.workloadSettings.environments }}:
+  
+    - stage: ${{ env }}
+      dependsOn: build
+      variables:
+        - template: /${{ parameters.workloadSettings.configurationFilePath }}/${{ env }}-vars.yml@self
+
+      jobs:
+        - template: /pipelines/03-jobs/iac.deploy.job.yml
+          parameters:
+            workloadSettings: ${{ parameters.workloadSettings }}
+            jobSettings: 
+              environment: ${{ env }}
+          
+    

@@ -1,0 +1,28 @@
+resources:
+  repositories:
+  - repository: ReleaseEngine
+    type: github
+    endpoint: thecloudexplorers
+    name: thecloudexplorers/ReleaseEngine
+    ref: users/wcamargo/new-structure
+
+trigger: none
+            
+pool:
+  vmImage: 'ubuntu-latest'
+
+extends: 
+  template: /pipelines/01-workloads/alz.platform.workload.yml@ReleaseEngine
+  parameters:
+    workloadSettings:
+      configurationFilePath: /01-templates/workloads/platform/identity-access-management/tenant-iam-setup/examples/_config
+      environments:
+        - dev
+      # - prd
+      deploymentScript:
+        - name: Agent_ListDirectoryItems
+          scriptExtension: ps1
+          arguments:
+        - name: Agent_ListEnvironmentVariables
+          scriptExtension: ps1
+          arguments: -Directory "$(Pipeline.Workspace)"

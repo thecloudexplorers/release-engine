@@ -3,19 +3,19 @@ parameters:
     type: object
 
 stages:
-  
   - ${{ each env in parameters.workloadSettings.environments }}:
-  
-    - stage: ${{ env }}
-      dependsOn: build
-      variables:
-        - template: /${{ parameters.workloadSettings.configurationFilePath }}/${{ env }}-vars.yml@self
+      - ${{ each stage in parameters.workloadSettings.stages }}:
+          - stage: ${{ env }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+            displayName: Deploy ${{ stage.infrastructure.iac.name }} - ${{ env }}
+            dependsOn: build_${{ parameters.workloadSettings.name }}
+            variables:
+              - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env }}.yml@self
+              - template: /common/pipelines/_config/release-engine.config.yml@release-engine
 
-      jobs:
-        - template: /common/pipelines/03-jobs/iac.deploy.job.yml
-          parameters:
-            workloadSettings: ${{ parameters.workloadSettings }}
-            jobSettings: 
-              environment: ${{ env }}
-          
-    
+            jobs:
+              - template: /common/pipelines/03-jobs/iac.deploy.job.yml
+                parameters:
+                  workloadSettings: ${{ parameters.workloadSettings }}
+                  jobSettings:
+                    environment: ${{ env }}
+                    stage: ${{ stage }}

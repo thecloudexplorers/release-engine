@@ -3,31 +3,45 @@ parameters:
     type: object
 
 jobs:
-
   - job: ${{ variables.workload }}_build
-    variables: 
-      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
-    
     displayName: Building IaC Artifacts
-      
+    variables:
+      - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
+      - ${{ if eq( parameters.workloadSettings.workloadArtifactsPath, '') }}:
+          - name: workloadArtifactsPath
+            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}
+
     steps:
       - checkout: self
+      - checkout: release-engine
+      - checkout: workload
 
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: workloads/$(landingZoneType)/$(designArea)$(applicationLandingZone)/$(workload)
+          SourceFolder: $(workloadArtifactsPath)/src
           Contents: |
             **
             !tests/**
             !examples/**
+            !workload.yml
           TargetFolder: $(build.artifactstagingdirectory)/$(workload)
+          flattenFolders: false
+
+      - task: CopyFiles@2
+        displayName: Copying Configuration content
+        inputs:
+          SourceFolder: $(Pipeline.Workspace)/s/$(Build.Repository.Name)/${{ parameters.workloadSettings.configurationFilePath }}
+          Contents: |
+            **
+            !pipelines/**
+          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/$(configurationArtifactName)
           flattenFolders: false
 
       - task: CopyFiles@2
         displayName: Copying common content
         inputs:
-          SourceFolder: common
+          SourceFolder: $(Pipeline.Workspace)/s/$(releaseEngineRepositoryName)/common
           Contents: |
             **
             !tests/**
@@ -35,13 +49,13 @@ jobs:
             !pipelines/**
           TargetFolder: $(build.artifactstagingdirectory)/common
           flattenFolders: false
-      
+
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(build.artifactstagingdirectory)/$(workload)
-          artifact: $(workload)
+          artifact: $(workloadArtifactName)
           publishLocation: pipeline
-      
+
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(build.artifactstagingdirectory)/common

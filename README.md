@@ -10,4 +10,4 @@ Release Engine is a collection of reusable Azure DevOps deployment pipelines and
 - Infrastructure as Code: Manage and deploy infrastructure alongside application code.
 - PowerShell Scripts: Ready-to-use PowerShell scripts for common deployment tasks.
 - Simplified CI/CD: Streamline the setup and management of continuous integration and continuous deployment processes.
-- Customizable Workflows: Adapt the pipelines and scripts to fit your specific requirements.
+- Customizable Workflows: Adapt the pipelines and scripts to fit your specific requirements..

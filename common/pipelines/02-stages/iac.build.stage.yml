@@ -3,7 +3,10 @@ parameters:
     type: object
 
 stages:
-  - stage: build
+  - stage: build_${{ parameters.workloadSettings.name }}
+    dependsOn:
+    variables:
+      - template: /common/pipelines/_config/release-engine.config.yml@release-engine
     jobs:
       - template: /common/pipelines/03-jobs/iac.build.job.yml
         parameters:

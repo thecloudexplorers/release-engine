@@ -64,9 +64,9 @@ foreach ($key in $CustomBicepParameters.Keys) {
     $templateParameterObject.Add($key, $CustomBicepParameters[$key])
 }
 
-# Bicep parameters
-Write-Host "Bicep deployment"
-$deploySubscriptionArgs
+# Debug output for Bicep parameters
+Write-Debug "Bicep Parameters:"
+Write-Debug $templateParameterObject
 
 # Generate a unique deployment name using the deployment key
 $deploymentName = "deploy-$DeploymentKey"
@@ -79,7 +79,6 @@ $deploySubscriptionArgs = @{
     TemplateParameterObject = $templateParameterObject
     Name                    = $deploymentName
 }
-
 
 # Execute the Bicep deployment
 $azDeploymentResults = New-AzDeployment @deploySubscriptionArgs

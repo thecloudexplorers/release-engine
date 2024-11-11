@@ -1,9 +1,9 @@
 resources:
   repositories:
-  - repository: ReleaseEngine
+  - repository: release-engine
     type: github
     endpoint: thecloudexplorers
-    name: thecloudexplorers/ReleaseEngine
+    name: thecloudexplorers/release-engine
     ref: main
 
 trigger: none
@@ -12,10 +12,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 extends: 
-  template: /common/pipelines/01-workloads/alz.platform.workload.yml@ReleaseEngine
+  template: /pipelines/01-workloads/alz.platform.workload.yml@release-engine
   parameters:
     workloadSettings:
-      configurationFilePath: /01-workloads/platform/identity-access-management/tenant-iam-setup/examples/_config
+      configurationFilePath: /templates/workloads/platform/_TEMPLATE-COPY-ME-design-area/CHANGE-ME-workload/examples/_config
+      
       environments:
         - dev
       # - prd
