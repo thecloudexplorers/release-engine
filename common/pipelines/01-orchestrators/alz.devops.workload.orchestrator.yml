@@ -2,6 +2,13 @@ parameters:
   - name: workloadSettings
     type: object
 
+# Parameter validation
+conditions:
+  - ${{ if not(parameters.workloadSettings.environments) }}:
+      message: "Error: workloadSettings.environments is required"
+  - ${{ if not(parameters.workloadSettings.stages) }}:
+      message: "Error: workloadSettings.stages is required"
+
 stages:
 
   - template: /common/pipelines/02-stages/iac.build.stage.yml

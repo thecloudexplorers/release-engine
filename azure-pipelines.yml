@@ -1,0 +1,37 @@
+trigger:
+  branches:
+    include:
+      - main
+      - dev
+  paths:
+    include:
+      - common/pipelines/**
+      - pipelines/**
+      - templates/**
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: PowerShell@2
+  displayName: 'Install Required Modules'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Install-Module -Name Pester -Force -SkipPublisherCheck
+      Install-Module -Name powershell-yaml -Force -SkipPublisherCheck
+
+- task: PowerShell@2
+  displayName: 'Run Pester Tests'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $config = New-PesterConfiguration -Hashtable (. "./tests/.config/pester.config.ps1")
+      Invoke-Pester -Configuration $config
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/test-results.xml'
+    failTaskOnFailedTests: true
