@@ -12,7 +12,7 @@ stages:
       workloadSettings:
         name: example_workload
         configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
-        workloadDefinitionRepositoryName: set-example_workload-definition
+        workloadDefinitionRepositoryName: thecloudexplorers/release-engine
         environments: ${{ parameters.platformWorkloadSettings.environments }}
         stages:
           # It is possible to create stages dynamically, defined at configuration level, currently used for Subscription Vending
