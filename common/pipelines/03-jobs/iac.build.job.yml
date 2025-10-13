@@ -17,7 +17,7 @@ jobs:
       - checkout: workload
 
       - powershell: |
-          Get-ChildItem $(build.artifactstagingdirectory) -Recurse
+          Get-ChildItem  $(Pipeline.Workspace) -Recurse
 
       - task: CopyFiles@2
         displayName: Copying Workload content
