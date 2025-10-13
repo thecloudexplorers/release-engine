@@ -1,0 +1,51 @@
+{
+  "ado_org_name": "", //thecloudexplorers
+  "tenant_name": "thecloudexplorers", //TODO: Standardize the pattern, at thecloudexplorers this is the primary domain, perhaps call it alias to create consistency?
+
+  // Full name of the area
+  "landing_zone_name": "Platform",
+  // Description of the solution, try to be as descriptive as possible
+  "landing_zone_description": "Platform Hosted Capabilities",
+  // Acronym of the landing zone
+  // Allowed value: [a-z][0-9]{3}
+  "landing_zone_name_abbreviation": "phc",
+
+  "managementGroupId": "mg30009",
+
+  // Full name of the solution
+  "solution_name": "Azure DevOps Workload Template",
+  // Description of the solution, try to be as descriptive as possible
+  "solution_description": "The Azure DevOps Workload Template is deployed within the Platform-Hosted Capabilities Landing Zone. It provides a template to be used as a baseline to create new workloads.",
+  // Acronym of the landing zone
+  // Allowed value: [a-z][0-9]{3}
+  "solution_name_abbreviation": "ado",
+  "criticality": "Low",
+
+  "environment_stage_abbreviation": "prd",
+  "workload_instance": "001",
+
+  // The hardcoded solution operator, this user is granted operator duty by the platform to prevent lock-outs via the self service RBAC
+  // This user is als granted the Owner role on all the security groups part of this solution
+  // Allowed value: UPN
+  "primary_owner": "wesley.camargo@thecloudexplorers.onmicrosoft.com",
+  "secondary_owner": "wesley.camargo@thecloudexplorers.onmicrosoft.com",
+  "tertiary_owner": "wesley.camargo@thecloudexplorers.onmicrosoft.com",
+
+  //TODO: Move to vars
+  // Billing information
+  "enrollmentAccountId": "378473",
+  "billingAccountId": "63389363",
+
+  // Deployment information
+  "environmentName": "Sandbox",
+  "environmentAbbreviation": "sbx",
+  "workloadInstance": "001",
+
+  //TODO: Enable when deploying the Platform Solutions
+  // Description of the PFU workload which all solutions have.
+  // These are the platform shared resources, such as Hub-Spoke vNET integration.
+  // "workload_name_pfu": "Platform Foundation Utilities",
+  // "workload_name_abbreviation_pfu": "pfu",
+  // Functional name of the team that is responsible for the running and maintaining of the solution
+  "operations_team": "Platform Team"
+}

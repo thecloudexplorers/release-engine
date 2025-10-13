@@ -1,0 +1,39 @@
+name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+resources:
+  repositories:
+    # - repository: release-engine # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
+    #   type: git
+    #   name: ssc-set/set-release_engine-azdo # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
+    #   # ref: refs/tags/v1.0.2
+    #   ref: refs/heads/upstream-main
+    - repository: release-engine # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
+      type: github
+      name: thecloudexplorers/release-engine # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
+      endpoint: thecloudexplorers
+      ref: refs/heads/users/wcamargo/examples
+
+    - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
+      type: github
+      name: thecloudexplorers/release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
+      endpoint: thecloudexplorers
+      ref: refs/heads/users/wcamargo/examples
+
+trigger:
+  branches:
+    include:
+      - main
+      - users/*
+
+pool:
+  vmImage: "windows-latest"
+
+extends:
+  template: /examples/definition/src/workload.yml@workload
+
+  parameters:
+    platformWorkloadSettings:
+      configurationFilePath: /examples/configuration/src/_config
+      iacParameterFileName: workloadTemplate.module.parameters.json
+      environments:
+        - production
