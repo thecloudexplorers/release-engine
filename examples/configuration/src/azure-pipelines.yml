@@ -7,17 +7,16 @@ resources:
     #   name: ssc-set/set-release_engine-azdo # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
     #   # ref: refs/tags/v1.0.2
     #   ref: refs/heads/upstream-main
-    # - repository: release-engine # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-    #   type: github
-    #   name: release-engine # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
-    #   endpoint: thecloudexplorers
-    #   ref: refs/heads/users/wcamargo/examples
+    - repository: release-engine # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
+      type: github
+      name: thecloudexplorers/release-engine # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
+      endpoint: thecloudexplorers
+      # ref: refs/tags/v1.0.2
+      ref: refs/heads/main
 
     - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-      type: github
-      name: release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
-      endpoint: "thecloudexplorers (1)"
-      ref: refs/heads/users/wcamargo/examples
+      type: git
+      name: ssc-set/set-example_workload-definition
 
 trigger:
   branches:
