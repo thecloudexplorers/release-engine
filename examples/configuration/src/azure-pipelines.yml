@@ -13,11 +13,11 @@ resources:
       endpoint: thecloudexplorers
       ref: refs/heads/users/wcamargo/examples
 
-    - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-      type: github
-      name: release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
-      endpoint: "thecloudexplorers (1)"
-      ref: refs/heads/users/wcamargo/examples
+    # - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
+    #   type: github
+    #   name: release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
+    #   endpoint: "thecloudexplorers (1)"
+    #   ref: refs/heads/users/wcamargo/examples
 
 trigger:
   branches:
