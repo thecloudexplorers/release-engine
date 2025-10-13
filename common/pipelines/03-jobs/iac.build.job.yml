@@ -16,6 +16,9 @@ jobs:
       - checkout: release-engine
       - checkout: workload
 
+      - powershell: |
+          Get-ChildItem $(build.artifactstagingdirectory) -Recurse
+
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
