@@ -26,7 +26,7 @@ stages:
                 iacArtifactsDirectory: /$(workload)/examples/definition/src/iac/az-resource-patterns/example_workload 
                 iacParameterFileName: ${{ parameters.platformWorkloadSettings.iacParameterFileName }}
                 iacParameterFilesDirectory: /examples/definition/src/iac/
-                workloadArtifactsPath: /examples/definition
+                workloadArtifactsPath: /$(workload)/examples/definition
                 # Use to override bicep parameters
                 # customBicepParameters: '@{<param name>="$(<param value>)"}'
 
