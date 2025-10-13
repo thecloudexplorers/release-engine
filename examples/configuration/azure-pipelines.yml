@@ -19,7 +19,11 @@ resources:
       endpoint: thecloudexplorers
       ref: refs/heads/users/wcamargo/examples
 
-trigger: none
+trigger:
+  branches:
+    include:
+      - main
+      - users/*
 
 pool:
   vmImage: "windows-latest"
