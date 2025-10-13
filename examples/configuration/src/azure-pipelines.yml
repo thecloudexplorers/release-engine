@@ -17,7 +17,7 @@ resources:
       type: github
       name: release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
       endpoint: "thecloudexplorers (1)"
-      ref: users/wcamargo/examples
+      ref: refs/heads/users/wcamargo/examples
 
 trigger:
   branches:
