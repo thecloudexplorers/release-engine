@@ -9,14 +9,15 @@ resources:
     #   ref: refs/heads/upstream-main
     - repository: release-engine # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
       type: github
-      name: thecloudexplorers/release-engine # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
+      name: release-engine # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
       endpoint: thecloudexplorers
-      # ref: refs/tags/v1.0.2
-      ref: refs/heads/main
+      ref: refs/heads/users/wcamargo/examples
 
     - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-      type: git
-      name: ssc-set/set-example_workload-definition
+      type: github
+      name: release-engine # CHANGE WORKLOAD REPOSITORY ACCORDINGLY TO YOUR NEEDS
+      endpoint: thecloudexplorers
+      ref: refs/heads/users/wcamargo/examples
 
 trigger:
   branches:
