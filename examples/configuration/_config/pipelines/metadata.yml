@@ -1,0 +1,11 @@
+variables:
+  landingZoneType: platform # Represents the type of the Landing Zone Aligned with CAF. Allowed values are [platform/application]
+
+  # DESIGN AREAS are used when the landing zone type is PLATFORM
+  # APPLICATION LANDING ZONES are used when the landing zone type is APPLICATION
+  # They are on the same hierarchical level and MUST NOT BE POPULATED SIMULTANEOUSLY
+  designArea: example # If landingZoneType is platform, the correspondent design area on CAF must be informed. Allowed values are [TODO]
+  applicationLandingZone: # APPLICATION-LANDING-ZONE-PLACEHOLDER # If landingZoneType is application, it must be informed according to business areas
+
+  workload: workload-example # The purpose of the workload, aligned with which functionality does it aggregate
+  workloadLocation: westeurope

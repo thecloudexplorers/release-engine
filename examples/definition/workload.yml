@@ -1,0 +1,31 @@
+parameters:
+  - name: platformWorkloadSettings
+    type: object
+
+variables:
+  - name: serviceConnection
+    value: ssc-set-dev-sp001 # Must be replaced by the Workload dedicated SPN of the lowest environment . It is used for validate the pipeline run, and will be overriden by the correct SPN of each environment on runtime
+
+stages:
+  - template: /common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml@release-engine
+    parameters:
+      workloadSettings:
+        name: example_workload
+        configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
+        workloadDefinitionRepositoryName: set-example_workload-definition
+        environments: ${{ parameters.platformWorkloadSettings.environments }}
+        stages:
+          # It is possible to create stages dynamically, defined at configuration level, currently used for Subscription Vending
+          # - ${{ each collectionItem in parameters.platformWorkloadSettings.collection }}:
+          - infrastructure:
+              iac:
+                name: example_workload
+                deploymentScope: Subscription
+                serviceConnection: $(serviceConnection)
+                iacMainFileName: workloadTemplate.module.bicep
+                iacArtifactsDirectory: /$(workload)/examples/definition/iac/az-resource-patterns/example_workload 
+                iacParameterFileName: ${{ parameters.platformWorkloadSettings.iacParameterFileName }}
+                iacParameterFilesDirectory: /examples/definition/iac/
+                # Use to override bicep parameters
+                # customBicepParameters: '@{<param name>="$(<param value>)"}'
+
