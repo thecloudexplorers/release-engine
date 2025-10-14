@@ -143,7 +143,6 @@ $currentConfigFoldersCollection.ForEach{
             Write-Host "##[section]Mapping tokens config file [$($currentConfigFile.Name)]"
             $metadataFileContent = Get-Content -Path $metadataFile.FullName
             [System.Collections.Hashtable] $metadata = $null
-
             
             # Validate metadata file content
             if ($metadataFileContent -isnot [System.Array]) {                            

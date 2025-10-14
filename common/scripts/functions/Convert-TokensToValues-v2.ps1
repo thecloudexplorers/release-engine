@@ -49,8 +49,7 @@ Source      : https://github.com/thecloudexplorers/simply-scripted
 
 function Convert-TokensToValues {
     [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
+    param (        
         [ValidateNotNullOrEmpty()]
         [System.Collections.Hashtable] $MetadataCollection,
 
@@ -87,7 +86,7 @@ function Convert-TokensToValues {
             $token = $match.Groups[1].Value
 
             # Check in MetadataCollection
-            if ($MetadataCollection.ContainsKey($token)) {
+            if (($null -ne $MetadataCollection) -and ($MetadataCollection.ContainsKey($token))) {
                 $value = $MetadataCollection[$token]
                 Write-Host "##[command][metadata]$token=$value" -ForegroundColor Green
                 $targetFileContent = $targetFileContent.Replace($match.Value, $value)
