@@ -130,7 +130,17 @@ $currentConfigFoldersCollection.ForEach{
 
     $metadataFile = Get-ChildItem -Path $currentConfigFolder -Attributes !Directory | Where-Object { $_.Name -eq 'metadata.jsonc' }
     if ($null -eq $metadataFile) {
-        Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found, be sure that the matching are present in environment variables."
+        Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found. Using an empty hashtable for MetadataCollection."
+        $metadata = @{}
+    } else {
+        # Process metadata file
+        $metadataFileContent = Get-Content -Path $metadataFile.FullName
+        try {
+            $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
+        } catch {
+            Write-Error "Failed to convert metadata file to hashtable. Ensure it contains a valid JSON object."
+            exit 1
+        }
     }
 
     # Ensure config files are present and metadata file is present, if not skip processing
@@ -140,20 +150,24 @@ $currentConfigFoldersCollection.ForEach{
         $configFilesCollection.ForEach{
             $currentConfigFile = $_
 
-            Write-Host "##[section]Processing config file [$($currentConfigFile.Name)]"
+            Write-Host "##[section]Mapping tokens config file [$($currentConfigFile.Name)]"
             $metadataFileContent = Get-Content -Path $metadataFile.FullName
             [System.Collections.Hashtable] $metadata = $null
-            $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
+            
+            # Validate metadata file content
+            if ($metadataFileContent -isnot [System.Array]) {                            
+                $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
 
-            # Extract token value from filename if required
-            if ($ExtractTokenValueFromConfigFileName.IsPresent) {
-                Write-Host "Extracting token value from filename"
-                if ($currentConfigFile.Name.Contains($PrefixForConfigFileNameWithTokenValue)) {
-                    Write-Host "Processing config file [$($currentConfigFile.Name)]"
-                    $tokenValueFromConfigFileName = $currentConfigFile.Name.Split('-')[1].Split('.')[0]
+                # Extract token value from filename if required
+                if ($ExtractTokenValueFromConfigFileName.IsPresent) {
+                    Write-Host "Extracting token value from filename"
+                    if ($currentConfigFile.Name.Contains($PrefixForConfigFileNameWithTokenValue)) {
+                        Write-Host "Processing config file [$($currentConfigFile.Name)]"
+                        $tokenValueFromConfigFileName = $currentConfigFile.Name.Split('-')[1].Split('.')[0]
 
-                    Write-Debug "Adding key [$TargetTokenNameForTokenValueFromConfigFileName] with value [$tokenValueFromConfigFileName] to metadata hashtable"
-                    $metadata.Add($TargetTokenNameForTokenValueFromConfigFileName, $tokenValueFromConfigFileName)
+                        Write-Debug "Adding key [$TargetTokenNameForTokenValueFromConfigFileName] with value [$tokenValueFromConfigFileName] to metadata hashtable"
+                        $metadata.Add($TargetTokenNameForTokenValueFromConfigFileName, $tokenValueFromConfigFileName)
+                    }
                 }
             }
 

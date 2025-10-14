@@ -9,7 +9,10 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
       - ${{ if eq( parameters.workloadSettings.workloadArtifactsPath, '') }}:
           - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}
+            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/src
+      - ${{ else }}:
+          - name: workloadArtifactsPath
+            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/${{ parameters.workloadSettings.workloadArtifactsPath }}
 
     steps:
       - checkout: self
@@ -19,7 +22,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(workloadArtifactsPath)/src
+          SourceFolder: $(workloadArtifactsPath)
           Contents: |
             **
             !tests/**

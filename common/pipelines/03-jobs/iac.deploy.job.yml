@@ -10,8 +10,8 @@ jobs:
     environment: ${{ parameters.jobSettings.environment }}
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
-      - name: iacArtifactsDirectory
-        value: $(Pipeline.Workspace)${{ parameters.jobSettings.stage.infrastructure.iac.iacArtifactsDirectory }}
+      - name: iacArtifactsDirectory        
+        value: $(Pipeline.Workspace)/$(workload)/
       - name: iacMainFileName
         value: ${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
       - name: iacMainFilePath
@@ -23,7 +23,7 @@ jobs:
       runOnce:
         deploy:
           steps:
-
+           
             - task: PowerShell@2 #TODO: Move to dedicated task
               displayName: Replace Config Tokens
               inputs:
