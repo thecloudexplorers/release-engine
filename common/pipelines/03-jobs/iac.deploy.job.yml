@@ -25,6 +25,17 @@ jobs:
           steps:
 
             - task: PowerShell@2 #TODO: Move to dedicated task
+              displayName: Load JSON Configuration
+              inputs:
+                targetType: filePath
+                failOnStderr: true
+                showWarnings: true
+                pwsh: true
+                filePath: $(Pipeline.Workspace)/common/scripts/Load-JsonConfiguration.ps1
+                arguments: |
+                  -ConfigFilesRootFolder '$(iacParameterFilesDirectory)'    
+
+            - task: PowerShell@2 #TODO: Move to dedicated task
               displayName: Replace Config Tokens
               inputs:
                 targetType: filePath
