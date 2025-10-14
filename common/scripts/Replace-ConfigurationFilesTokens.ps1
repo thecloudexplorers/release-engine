@@ -128,42 +128,26 @@ $currentConfigFoldersCollection.ForEach{
         continue 
     }
 
-    $metadataFile   = Get-ChildItem -Path $currentConfigFolder -Attributes !Directory | Where-Object { $_.Name -eq 'metadata.jsonc' }
-
+    $metadataFile = Get-ChildItem -Path $currentConfigFolder -Attributes !Directory | Where-Object { $_.Name -eq 'metadata.jsonc' }
+    if ($null -eq $metadataFile) {
+        Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found, be sure that the matching are present in environment variables."
+    }
 
     # Ensure config files are present and metadata file is present, if not skip processing
     # if ($null -ne $configFilesCollection -and $null -ne $metadataFile) {
     if ($null -ne $configFilesCollection) {
-        # Skip processing if metadata file is not present
-        if ($null -eq $metadataFile) {
-            Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found. Skipping processing for directory [$($currentConfigFolder.Name)]."
-            return
-        }
-
         # Iterating config files collection
         $configFilesCollection.ForEach{
             $currentConfigFile = $_
 
-            if ($null -eq $metadataFile) {
-                Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found, be sure that the matching are present in environment variables."
-            } else {
-                Write-Host "##[section]Mapping tokens of config file [$($currentConfigFile.Name)]"
-                $metadataFileContent = Get-Content -Path $metadataFile.FullName
+            Write-Host "##[section]Mapping tokens config file [$($currentConfigFile.Name)]"
+            $metadataFileContent = Get-Content -Path $metadataFile.FullName
+            [System.Collections.Hashtable] $metadata = $null
 
-                # Validate metadata file content
-                if ($metadataFileContent -is [System.Array]) {
-                    Write-Error "Metadata file contains an array. Expected a JSON object."
-                    exit 1
-                }
-
-                # Convert metadata to hashtable
-                [System.Collections.Hashtable] $metadata = $null
-                try {
-                    $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
-                } catch {
-                    Write-Error "Failed to convert metadata file to hashtable. Ensure it contains a valid JSON object."
-                    exit 1
-                }
+            
+            # Validate metadata file content
+            if ($metadataFileContent -isnot [System.Array]) {                            
+                $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
 
                 # Extract token value from filename if required
                 if ($ExtractTokenValueFromConfigFileName.IsPresent) {
@@ -177,7 +161,6 @@ $currentConfigFoldersCollection.ForEach{
                     }
                 }
             }
-
 
             # Check if custom output folder is specified, if so ensure the file is saved in that folder
             [System.String] $outputPath = $null
