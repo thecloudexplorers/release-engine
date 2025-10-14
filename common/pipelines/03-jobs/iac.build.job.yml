@@ -9,7 +9,10 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
       - ${{ if eq( parameters.workloadSettings.workloadArtifactsPath, '') }}:
           - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}
+            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/src
+      - ${{ else }}:
+          - name: workloadArtifactsPath
+            value: ${{ parameters.workloadSettings.workloadArtifactsPath }}
 
     steps:
       - checkout: self

@@ -20,7 +20,7 @@ jobs:
                     
                     - task: AzurePowerShell@5
                       name: deploy_azure_powershell_${{ script.name }}
-                      displayName: Runnin script ${{ script.name }}
+                      displayName: Running script ${{ script.name }}
                       inputs:                    
                         pwsh: true
                         azureSubscription: $(serviceConnection)
