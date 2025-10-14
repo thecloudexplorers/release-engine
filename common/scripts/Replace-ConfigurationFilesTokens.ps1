@@ -134,6 +134,12 @@ $currentConfigFoldersCollection.ForEach{
     # Ensure config files are present and metadata file is present, if not skip processing
     # if ($null -ne $configFilesCollection -and $null -ne $metadataFile) {
     if ($null -ne $configFilesCollection) {
+        # Skip processing if metadata file is not present
+        if ($null -eq $metadataFile) {
+            Write-Host -ForegroundColor Yellow "##[warning]metadata.jsonc file not found. Skipping processing for directory [$($currentConfigFolder.Name)]."
+            return
+        }
+
         # Iterating config files collection
         $configFilesCollection.ForEach{
             $currentConfigFile = $_
@@ -143,8 +149,21 @@ $currentConfigFoldersCollection.ForEach{
             } else {
                 Write-Host "##[section]Mapping tokens of config file [$($currentConfigFile.Name)]"
                 $metadataFileContent = Get-Content -Path $metadataFile.FullName
+
+                # Validate metadata file content
+                if ($metadataFileContent -is [System.Array]) {
+                    Write-Error "Metadata file contains an array. Expected a JSON object."
+                    exit 1
+                }
+
+                # Convert metadata to hashtable
                 [System.Collections.Hashtable] $metadata = $null
-                $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
+                try {
+                    $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
+                } catch {
+                    Write-Error "Failed to convert metadata file to hashtable. Ensure it contains a valid JSON object."
+                    exit 1
+                }
 
                 # Extract token value from filename if required
                 if ($ExtractTokenValueFromConfigFileName.IsPresent) {
