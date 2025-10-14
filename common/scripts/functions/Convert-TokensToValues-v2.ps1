@@ -49,8 +49,7 @@ Source      : https://github.com/thecloudexplorers/simply-scripted
 
 function Convert-TokensToValues {
     [CmdletBinding()]
-    param (        
-        [ValidateNotNullOrEmpty()]
+    param (                
         [System.Collections.Hashtable] $MetadataCollection,
 
         [Parameter(Mandatory)]
