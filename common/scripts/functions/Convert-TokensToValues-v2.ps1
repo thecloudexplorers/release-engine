@@ -50,8 +50,6 @@ Source      : https://github.com/thecloudexplorers/simply-scripted
 function Convert-TokensToValues {
     [CmdletBinding()]
     param (                
-        [System.Collections.Hashtable] $MetadataCollection,
-
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
         [System.String] $TargetFilePath,
@@ -65,7 +63,9 @@ function Convert-TokensToValues {
 
         [Parameter(Mandatory)]
         [ValidateNotNullOrEmpty()]
-        [System.String] $EndTokenPattern
+        [System.String] $EndTokenPattern,
+
+        [System.Collections.Hashtable] $MetadataCollection
     )
 
     try {
