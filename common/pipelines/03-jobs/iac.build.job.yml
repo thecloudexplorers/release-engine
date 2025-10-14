@@ -12,7 +12,7 @@ jobs:
             value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/src
       - ${{ else }}:
           - name: workloadArtifactsPath
-            value: ${{ parameters.workloadSettings.workloadArtifactsPath }}
+            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/${{ parameters.workloadSettings.workloadArtifactsPath }}
 
     steps:
       - checkout: self
