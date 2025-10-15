@@ -194,10 +194,10 @@ $currentConfigFoldersCollection.ForEach{
                 $outputPath = $currentConfigFile.FullName
             }
 
-            $metadata = New-Object [System.Collections.Hashtable]
+            # $metadata = New-Object [System.Collections.Hashtable]
 
             $tokensToValuesArgs = @{
-                MetadataCollection   = $metadata
+                # MetadataCollection   = $metadata
                 TargetFilePath       = $currentConfigFile.FullName
                 CustomOutputFilePath = $outputPath
                 StartTokenPattern    = $StartTokenPattern
