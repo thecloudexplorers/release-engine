@@ -18,6 +18,7 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       - checkout: release-engine
+        path: releaseEngineCheckoutDirectory
       - checkout: workload
         path: workloadCheckoutDirectory
 
@@ -47,7 +48,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying common content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/s/$(releaseEngineRepositoryName)/common
+          SourceFolder: $(Pipeline.Workspace)/releaseEngineCheckoutDirectory/common
           Contents: |
             **
             !tests/**
