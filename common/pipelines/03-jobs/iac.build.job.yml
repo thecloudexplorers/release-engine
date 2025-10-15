@@ -19,12 +19,13 @@ jobs:
         path: configurationCheckoutDirectory
       - checkout: release-engine
       - checkout: workload
-        # path: workloadCheckoutDirectory
+        path: workloadCheckoutDirectory
 
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(workloadArtifactsPath)
+          # SourceFolder: $(workloadArtifactsPath)
+          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory          
           Contents: |
             **
             !tests/**
@@ -34,7 +35,7 @@ jobs:
           flattenFolders: false
 
       - task: CopyFiles@2
-        displayName: Copying Configuration content
+        displayName: Copying content from Configuration repository
         inputs:
           SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.workloadSettings.configurationFilePath }}
           Contents: |
