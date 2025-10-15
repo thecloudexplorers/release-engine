@@ -64,7 +64,7 @@ jobs:
                     csmParametersFile: $(iacParameterFilesDirectory)${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
                     overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
                     deploymentMode: Incremental
-                    deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
+                    deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
                     deploymentOutputs: deploymentOutputs
 
             # Runs post deployment powershell scripts
