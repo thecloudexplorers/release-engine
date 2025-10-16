@@ -9,14 +9,14 @@ stages:
             displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             # displayName: Deploy ${{ env.displayName }} - ${{ stage.infrastructure.iac.name }}
             # dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-            ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
+            ${{ if and(eq(stage.infrastructure.iac.dependsOn, ''), eq(env.primaryEnvironment, 'true'))) }}:
             
               dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
               # dependsOn: ${{ iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}') }}
 
             ${{ else }}:
               dependsOn:
-                # - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
                 - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
               
             variables:
