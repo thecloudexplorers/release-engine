@@ -10,12 +10,11 @@ jobs:
     environment: ${{ parameters.jobSettings.environment }}
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
+      
       - name: workloadArtifactsDirectory        
-        value: $(Pipeline.Workspace)/$(workload)/
-      - name: iacMainFileName
-        value: ${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
+        value: $(Pipeline.Workspace)/$(workload)/      
       - name: iacMainFilePath
-        value: $(workloadArtifactsDirectory)/$(iacMainFileName)
+        value: $(workloadArtifactsDirectory)/${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
 
     strategy:
       runOnce:
