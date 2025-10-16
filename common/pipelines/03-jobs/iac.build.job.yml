@@ -19,7 +19,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory/patterns/$(workload)
+          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory/${{ parameters.workloadSettings.workloadArtifactsPath }}
           Contents: |
             **
             !tests/**
