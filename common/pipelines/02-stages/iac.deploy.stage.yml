@@ -5,11 +5,11 @@ parameters:
 stages:
   - ${{ each env in parameters.workloadSettings.environments }}:
       - ${{ each stage in parameters.workloadSettings.stages }}:
-          - stage: ${{ env }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
-            displayName: Deploy ${{ stage.infrastructure.iac.name }} - ${{ env }}
+          - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+            displayName: Deploy ${{ stage.infrastructure.iac.name }} - ${{ env.name }}
             dependsOn: build_${{ parameters.workloadSettings.name }}
             variables:
-              - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env }}.yml@self
+              - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env.name }}.yml@self
               - template: /common/pipelines/_config/release-engine.config.yml@release-engine
 
             jobs:
