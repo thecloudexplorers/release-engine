@@ -4,6 +4,7 @@ parameters:
 
 stages:
   - stage: build_${{ parameters.workloadSettings.name }}
+    displayName: Build - ${{ parameters.workloadSettings.name }}
     dependsOn:
     variables:
       - template: /common/pipelines/_config/release-engine.config.yml@release-engine
