@@ -150,26 +150,28 @@ $currentConfigFoldersCollection.ForEach{
         $configFilesCollection.ForEach{
             $currentConfigFile = $_
 
-            Write-Host "##[section]Mapping tokens config file [$($currentConfigFile.Name)]"
-            $metadataFileContent = Get-Content -Path $metadataFile.FullName
-            [System.Collections.Hashtable] $metadata = $null
+            # Write-Host "##[section]Mapping tokens config file [$($currentConfigFile.Name)]"
+            # $metadataFileContent = Get-Content -Path $metadataFile.FullName
+            # [System.Collections.Hashtable] $metadata = $null
             
-            # Validate metadata file content
-            if ($metadataFileContent -isnot [System.Array]) {                            
-                $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
+            # # Validate metadata file content
+            # if ($metadataFileContent -isnot [System.Array]) {                            
+            #     $metadata = $metadataFileContent | ConvertFrom-Json -AsHashtable
 
-                # Extract token value from filename if required
-                if ($ExtractTokenValueFromConfigFileName.IsPresent) {
-                    Write-Host "Extracting token value from filename"
-                    if ($currentConfigFile.Name.Contains($PrefixForConfigFileNameWithTokenValue)) {
-                        Write-Host "Processing config file [$($currentConfigFile.Name)]"
-                        $tokenValueFromConfigFileName = $currentConfigFile.Name.Split('-')[1].Split('.')[0]
+            #     # Extract token value from filename if required
+            #     if ($ExtractTokenValueFromConfigFileName.IsPresent) {
+            #         Write-Host "Extracting token value from filename"
+            #         if ($currentConfigFile.Name.Contains($PrefixForConfigFileNameWithTokenValue)) {
+            #             Write-Host "Processing config file [$($currentConfigFile.Name)]"
+            #             $tokenValueFromConfigFileName = $currentConfigFile.Name.Split('-')[1].Split('.')[0]
 
-                        Write-Debug "Adding key [$TargetTokenNameForTokenValueFromConfigFileName] with value [$tokenValueFromConfigFileName] to metadata hashtable"
-                        $metadata.Add($TargetTokenNameForTokenValueFromConfigFileName, $tokenValueFromConfigFileName)
-                    }
-                }
-            }
+            #             Write-Debug "Adding key [$TargetTokenNameForTokenValueFromConfigFileName] with value [$tokenValueFromConfigFileName] to metadata hashtable"
+            #             $metadata.Add($TargetTokenNameForTokenValueFromConfigFileName, $tokenValueFromConfigFileName)
+            #         }
+            #     }
+            # }
+
+            
 
             # Check if custom output folder is specified, if so ensure the file is saved in that folder
             [System.String] $outputPath = $null
@@ -192,8 +194,10 @@ $currentConfigFoldersCollection.ForEach{
                 $outputPath = $currentConfigFile.FullName
             }
 
+            # $metadata = New-Object [System.Collections.Hashtable]
+
             $tokensToValuesArgs = @{
-                MetadataCollection   = $metadata
+                # MetadataCollection   = $metadata
                 TargetFilePath       = $currentConfigFile.FullName
                 CustomOutputFilePath = $outputPath
                 StartTokenPattern    = $StartTokenPattern

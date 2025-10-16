@@ -7,22 +7,19 @@ jobs:
     displayName: Building IaC Artifacts
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
-      - ${{ if eq( parameters.workloadSettings.workloadArtifactsPath, '') }}:
-          - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/src
-      - ${{ else }}:
-          - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/${{ parameters.workloadSettings.workloadArtifactsPath }}
 
     steps:
       - checkout: self
+        path: configurationCheckoutDirectory
       - checkout: release-engine
+        path: releaseEngineCheckoutDirectory
       - checkout: workload
+        path: workloadCheckoutDirectory
 
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(workloadArtifactsPath)
+          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory/${{ parameters.workloadSettings.workloadArtifactsPath }}
           Contents: |
             **
             !tests/**
@@ -32,19 +29,19 @@ jobs:
           flattenFolders: false
 
       - task: CopyFiles@2
-        displayName: Copying Configuration content
+        displayName: Copying content from Configuration repository
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/s/$(Build.Repository.Name)/${{ parameters.workloadSettings.configurationFilePath }}
+          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.workloadSettings.configurationFilePath }}
           Contents: |
             **
             !pipelines/**
-          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/$(configurationArtifactName)
+          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/configuration
           flattenFolders: false
 
       - task: CopyFiles@2
         displayName: Copying common content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/s/$(releaseEngineRepositoryName)/common
+          SourceFolder: $(Pipeline.Workspace)/releaseEngineCheckoutDirectory/common
           Contents: |
             **
             !tests/**
@@ -56,7 +53,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(build.artifactstagingdirectory)/$(workload)
-          artifact: $(workloadArtifactName)
+          artifact: $(workload)
           publishLocation: pipeline
 
       - task: PublishPipelineArtifact@1
