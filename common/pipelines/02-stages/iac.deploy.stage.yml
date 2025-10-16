@@ -17,5 +17,5 @@ stages:
                 parameters:
                   workloadSettings: ${{ parameters.workloadSettings }}
                   jobSettings:
-                    environment: ${{ env }}
+                    environment: ${{ env.name }}
                     stage: ${{ stage }}
