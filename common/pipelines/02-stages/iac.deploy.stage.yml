@@ -9,9 +9,8 @@ stages:
             displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             # displayName: Deploy ${{ env.displayName }} - ${{ stage.infrastructure.iac.name }}
             # dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-            dependsOn: iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}')
-            
-            
+            dependsOn: ${{ iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}') }}
+                        
             
             variables:
               - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env.name }}.yml@self
