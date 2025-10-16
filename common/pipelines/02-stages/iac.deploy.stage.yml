@@ -7,7 +7,9 @@ stages:
       - ${{ each stage in parameters.workloadSettings.stages }}:
           - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             displayName: Deploy ${{ stage.infrastructure.iac.name }} - ${{ env.name }}
-            dependsOn: build_${{ parameters.workloadSettings.name }}
+            # dependsOn: build_${{ parameters.workloadSettings.name }}
+            dependsOn: ${{ env.dependsOn }}
+            
             variables:
               - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env.name }}.yml@self
               - template: /common/pipelines/_config/release-engine.config.yml@release-engine
@@ -18,6 +20,5 @@ stages:
                   workloadSettings: ${{ parameters.workloadSettings }}                  
                   jobSettings:
                     environment: ${{ env.name }}
-                    dependsOn: ${{ env.dependsOn }}
                     stage: ${{ stage }}
 
