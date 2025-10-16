@@ -3,12 +3,13 @@ parameters:
     type: object
 
 stages:
-  - stage: build_${{ parameters.workloadSettings.name }}
-    displayName: Build - ${{ parameters.workloadSettings.name }}
-    dependsOn:
-    variables:
-      - template: /common/pipelines/_config/release-engine.config.yml@release-engine
-    jobs:
-      - template: /common/pipelines/03-jobs/iac.build.job.yml
-        parameters:
-          workloadSettings: ${{ parameters.workloadSettings }}
+  - ${{ each stage in parameters.workloadSettings.stages }}:
+    - stage: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+      displayName: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+      dependsOn:
+      variables:
+        - template: /common/pipelines/_config/release-engine.config.yml@release-engine
+      jobs:
+        - template: /common/pipelines/03-jobs/iac.build.job.yml
+          parameters:
+            workloadSettings: ${{ parameters.workloadSettings }}
