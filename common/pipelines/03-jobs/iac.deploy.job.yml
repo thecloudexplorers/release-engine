@@ -61,7 +61,7 @@ jobs:
                     location: $(workloadLocation)
                     templateLocation: "Linked artifact"
                     csmFile: $(iacMainFilePath)
-                    csmParametersFile: $(iacParameterFilesDirectory)${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
+                    csmParametersFile: ${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
                     overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
                     deploymentMode: Incremental
                     deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
