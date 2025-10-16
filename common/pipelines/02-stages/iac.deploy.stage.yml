@@ -6,7 +6,8 @@ stages:
   - ${{ each env in parameters.workloadSettings.environments }}:
       - ${{ each stage in parameters.workloadSettings.stages }}:
           - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
-            displayName: Deploy ${{ env.displayName }} - ${{ stage.infrastructure.iac.name }}
+            displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+            # displayName: Deploy ${{ env.displayName }} - ${{ stage.infrastructure.iac.name }}
             dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
             
             variables:
