@@ -16,8 +16,8 @@ jobs:
         value: ${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
       - name: iacMainFilePath
         value: $(iacArtifactsDirectory)/$(iacMainFileName)
-      - name: iacParameterFilesDirectory
-        value: $(Pipeline.Workspace)/$(workloadArtifactName)/$(configurationArtifactName)/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFilesDirectory }}
+      # - name: iacParameterFilesDirectory
+      #   value: $(Pipeline.Workspace)/$(workload)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFilesDirectory }}
 
     strategy:
       runOnce:
@@ -33,7 +33,7 @@ jobs:
                 pwsh: true
                 filePath: $(Pipeline.Workspace)/common/scripts/Replace-ConfigurationFilesTokens.ps1                
                 arguments: |
-                  -ConfigFilesRootFolder '$(iacParameterFilesDirectory)'                  
+                  -ConfigFilesRootFolder '$(Pipeline.Workspace)/$(workload)/configuration'                  
 
             # Runs pre deployment powershell scripts
             - ${{ if ne(parameters.jobSettings.stage.infrastructure.preDeploymentScripts, '') }}:
