@@ -14,6 +14,10 @@ stages:
               dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
               # dependsOn: ${{ iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}') }}
 
+            ${{ elseif and(eq(stage.infrastructure.iac.dependsOn, ''), ne(env.primaryEnvironment, 'true')) }}:
+              dependsOn:
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+                
             ${{ else }}:
               dependsOn:
                 - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
