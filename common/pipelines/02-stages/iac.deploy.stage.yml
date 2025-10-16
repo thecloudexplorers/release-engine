@@ -15,7 +15,9 @@ stages:
               # dependsOn: ${{ iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}') }}
 
             ${{ else }}:
-              dependsOn: ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
+              dependsOn:
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+                - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
               
             variables:
               - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env.name }}.yml@self
