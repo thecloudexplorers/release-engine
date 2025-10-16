@@ -7,12 +7,6 @@ jobs:
     displayName: Building IaC Artifacts
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
-      - ${{ if eq( parameters.workloadSettings.workloadArtifactsPath, '') }}:
-          - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/src
-      - ${{ else }}:
-          - name: workloadArtifactsPath
-            value: $(Pipeline.Workspace)/s/${{ parameters.workloadSettings.workloadDefinitionRepositoryName }}/${{ parameters.workloadSettings.workloadArtifactsPath }}
 
     steps:
       - checkout: self
@@ -25,8 +19,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          # SourceFolder: $(workloadArtifactsPath)
-          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory          
+          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory/patterns/$(workload)
           Contents: |
             **
             !tests/**
@@ -42,7 +35,7 @@ jobs:
           Contents: |
             **
             !pipelines/**
-          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/$(configurationArtifactName)
+          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/configuration
           flattenFolders: false
 
       - task: CopyFiles@2
@@ -60,7 +53,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(build.artifactstagingdirectory)/$(workload)
-          artifact: $(workloadArtifactName)
+          artifact: $(workload)
           publishLocation: pipeline
 
       - task: PublishPipelineArtifact@1
