@@ -15,7 +15,9 @@ stages:
             jobs:
               - template: /common/pipelines/03-jobs/iac.deploy.job.yml
                 parameters:
-                  workloadSettings: ${{ parameters.workloadSettings }}
+                  workloadSettings: ${{ parameters.workloadSettings }}                  
                   jobSettings:
                     environment: ${{ env.name }}
+                    dependsOn: ${{ env.dependsOn }}
                     stage: ${{ stage }}
+
