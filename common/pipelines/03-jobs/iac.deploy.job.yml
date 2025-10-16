@@ -10,14 +10,12 @@ jobs:
     environment: ${{ parameters.jobSettings.environment }}
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/pipelines/metadata.yml@self
-      - name: iacArtifactsDirectory        
+      - name: workloadArtifactsDirectory        
         value: $(Pipeline.Workspace)/$(workload)/
       - name: iacMainFileName
         value: ${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
       - name: iacMainFilePath
-        value: $(iacArtifactsDirectory)/$(iacMainFileName)
-      # - name: iacParameterFilesDirectory
-      #   value: $(Pipeline.Workspace)/$(workload)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFilesDirectory }}
+        value: $(workloadArtifactsDirectory)/$(iacMainFileName)
 
     strategy:
       runOnce:
@@ -33,7 +31,7 @@ jobs:
                 pwsh: true
                 filePath: $(Pipeline.Workspace)/common/scripts/Replace-ConfigurationFilesTokens.ps1                
                 arguments: |
-                  -ConfigFilesRootFolder '$(Pipeline.Workspace)/$(workload)/configuration'                  
+                  -ConfigFilesRootFolder '$(workloadArtifactsDirectory)/configuration'
 
             # Runs pre deployment powershell scripts
             - ${{ if ne(parameters.jobSettings.stage.infrastructure.preDeploymentScripts, '') }}:
@@ -45,7 +43,7 @@ jobs:
                         pwsh: true
                         azureSubscription: ${{ script.serviceConnection }}
                         ScriptType: FilePath
-                        ScriptPath: $(Pipeline.Workspace)/$(workload)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
                         azurePowerShellVersion: LatestVersion
                         ScriptArguments: ${{ script.arguments }}
                         workingDirectory: $(Pipeline.Workspace)
@@ -61,7 +59,7 @@ jobs:
                     location: $(workloadLocation)
                     templateLocation: "Linked artifact"
                     csmFile: $(iacMainFilePath)
-                    csmParametersFile: $(Pipeline.Workspace)/$(workload)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
+                    csmParametersFile: $(workloadArtifactsDirectory)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
                     overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
                     deploymentMode: Incremental
                     deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
@@ -77,7 +75,7 @@ jobs:
                         pwsh: true
                         azureSubscription: ${{ script.serviceConnection }}
                         ScriptType: FilePath
-                        ScriptPath: $(Pipeline.Workspace)/$(workload)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
                         azurePowerShellVersion: LatestVersion
                         ScriptArguments: ${{ script.arguments }}
                         workingDirectory: $(Pipeline.Workspace)
