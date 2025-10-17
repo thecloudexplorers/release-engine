@@ -7,20 +7,28 @@ stages:
       - ${{ each stage in parameters.workloadSettings.stages }}:
           - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
-            # displayName: Deploy ${{ env.displayName }} - ${{ stage.infrastructure.iac.name }}
-            # dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-            ${{ if and(eq(stage.infrastructure.iac.dependsOn, ''), eq(env.primaryEnvironment, 'true')) }}:
+
+            # primary environment and no dependsOn
+            ${{ if and(eq(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
             
-              dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+              dependsOn: build_${{ stage.infrastructure.iac.name }}
+              # dependsOn: ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
               # dependsOn: ${{ iif(eq( stage.infrastructure.iac.dependsOn, ''), '${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}', '${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}') }}
 
-            ${{ elseif and(eq(stage.infrastructure.iac.dependsOn, ''), ne(env.primaryEnvironment, 'true')) }}:
+            # primary environment and has dependsOn
+            ${{ elseif and(eq(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
-                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+                - build_${{ stage.infrastructure.iac.name }}
+                - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
+            
+            # non-primary environment and no dependsOn
+            ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
+              dependsOn:
+                - ${{ env.name }}_${{ stage.infrastructure.iac.name }}
                 
-            ${{ else }}:
+            # non-primary environment and has dependsOn
+            ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
-                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
                 - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
               
             variables:
