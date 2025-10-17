@@ -27,10 +27,10 @@ stages:
                 # - ${{ env.name }}_${{ stage.infrastructure.iac.name }}
                 - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
                 
-            # # non-primary environment and has workload dependency
-            # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-            #   dependsOn:
-            #     - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
+            # non-primary environment and has workload dependency
+            ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+              dependsOn:
+                - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
               
             variables:
               - template: /${{ parameters.workloadSettings.configurationFilePath }}/pipelines/vars-${{ env.name }}.yml@self
