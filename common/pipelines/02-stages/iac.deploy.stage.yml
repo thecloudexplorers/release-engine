@@ -24,8 +24,8 @@ stages:
             # non-primary environment and no dependsOn
             ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
-                - ${{ env.name }}_${{ stage.infrastructure.iac.name }}
-                
+                # - ${{ env.name }}_${{ stage.infrastructure.iac.name }}
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
             # non-primary environment and has dependsOn
             ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
