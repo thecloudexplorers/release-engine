@@ -13,8 +13,8 @@ stages:
               
               - name: lastWorkloadInStage
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
-            
-            displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+            displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
+            # displayName: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
 
             # primary environment and does not have workload dependency
             ${{ if and(eq(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
