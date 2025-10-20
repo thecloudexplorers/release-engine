@@ -4,8 +4,8 @@ parameters:
 
 stages:
   - ${{ each stage in parameters.workloadSettings.stages }}:
-    - stage: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
-      displayName: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
+    - stage: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}      
+      displayName: 'Build - ${{ stage.infrastructure.iac.displayName }}'
       dependsOn:
       variables:
         - template: /common/pipelines/_config/release-engine.config.yml@release-engine
@@ -13,3 +13,4 @@ stages:
         - template: /common/pipelines/03-jobs/iac.build.job.yml
           parameters:
             workloadSettings: ${{ parameters.workloadSettings }}
+            
