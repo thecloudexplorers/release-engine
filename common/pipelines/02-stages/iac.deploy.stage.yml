@@ -4,20 +4,20 @@ parameters:
 
 stages:
 
-  - ${{ if eq(variables['System.Debug'], 'true') }}:
-    - stage: debug_stage
-      displayName: Debug Stage
-      jobs:
-        - job: debug_job
-          displayName: Debug Job
-          steps:
-          - powershell: |
-              # Shows all configurations for debugging purposes of workloadSettings
-              Write-Host "\nParameters:"
-              Write-Host '${{ convertToJson(parameters) }}'
-              Write-Host "\nVariables:"
-              Get-ChildItem env:
-            displayName: Display Settings and Environment Variables
+  - stage: debug_stage
+    displayName: Debug Stage
+    condition: eq( variables['System.Debug'], 'true' )
+    jobs:
+      - job: debug_job
+        displayName: Debug Job
+        steps:
+        - powershell: |
+            # Shows all configurations for debugging purposes of workloadSettings
+            Write-Host "\nParameters:"
+            Write-Host '${{ convertToJson(parameters) }}'
+            Write-Host "\nVariables:"
+            Get-ChildItem env:
+          displayName: Display Settings and Environment Variables
 
   - ${{ each env in parameters.workloadSettings.environments }}:
       - ${{ each stage in parameters.workloadSettings.stages }}:
