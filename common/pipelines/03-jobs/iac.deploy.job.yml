@@ -27,7 +27,8 @@ jobs:
                 Write-Host '${{ convertToJson(parameters) }}'
                 Write-Host "\nVariables:"
                 Get-ChildItem env:
-              displayName: Display Workload Settings              
+              displayName: Display Workload Settings
+              condition: eq( variables['System.Debug'], 'true' )
            
             - task: PowerShell@2 #TODO: Move to dedicated task
               displayName: Replace Config Tokens
@@ -66,6 +67,8 @@ jobs:
                     location: $(workloadLocation)
                     templateLocation: "Linked artifact"
                     csmFile: $(iacMainFilePath)
+                    # TODO: For each stage provide the specific configuration if multiple IaC per stage
+
                     csmParametersFile: $(workloadArtifactsDirectory)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
                     overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
                     deploymentMode: Incremental
