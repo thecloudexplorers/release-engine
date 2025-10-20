@@ -12,7 +12,7 @@ stages:
       workloadSettings: ${{ parameters.workloadSettings }}
   
   - stage: debug_stage_release_engine
-    displayName: Debug Stage Release Engine
+    displayName: Debug - Release Engine
     condition: eq( variables['System.Debug'], 'true' )
     jobs:
       - job: debug_job
@@ -24,4 +24,4 @@ stages:
             Write-Host '${{ convertToJson(parameters) }}'
             Write-Host "\nVariables:"
             Get-ChildItem env:
-          displayName: Display Settings and Environment Variables
+          displayName: Debug - Display Settings and Environment Variables

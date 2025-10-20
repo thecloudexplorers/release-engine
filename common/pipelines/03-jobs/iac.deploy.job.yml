@@ -27,7 +27,7 @@ jobs:
                 Write-Host '${{ convertToJson(parameters) }}'
                 Write-Host "\nVariables:"
                 Get-ChildItem env:
-              displayName: Display Workload Settings
+              displayName: Debug - Display Settings and Environment Variables
               condition: eq( variables['System.Debug'], 'true' )
            
             - task: PowerShell@2 #TODO: Move to dedicated task
