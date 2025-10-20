@@ -3,6 +3,14 @@ parameters:
     type: object
 
 stages:
+  - template: /common/pipelines/02-stages/iac.build.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+
+  - template: /common/pipelines/02-stages/iac.deploy.stage.yml
+    parameters:
+      workloadSettings: ${{ parameters.workloadSettings }}
+  
   - stage: debug_stage_release_engine
     displayName: Debug Stage Release Engine
     condition: eq( variables['System.Debug'], 'true' )
@@ -17,12 +25,3 @@ stages:
             Write-Host "\nVariables:"
             Get-ChildItem env:
           displayName: Display Settings and Environment Variables
-
-  - template: /common/pipelines/02-stages/iac.build.stage.yml
-    parameters:
-      workloadSettings: ${{ parameters.workloadSettings }}
-
-  - template: /common/pipelines/02-stages/iac.deploy.stage.yml
-    parameters:
-      workloadSettings: ${{ parameters.workloadSettings }}
-  
