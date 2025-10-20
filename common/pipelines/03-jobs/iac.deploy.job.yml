@@ -20,6 +20,11 @@ jobs:
       runOnce:
         deploy:
           steps:
+            - powershell: |
+                # Shows all configurations for debugging purposes of workloadSettings
+                Write-Host "Workload Settings:"
+                Write-Host '${{ convertToJson(parameters.workloadSettings) }}'
+              displayName: Display Workload Settings              
            
             - task: PowerShell@2 #TODO: Move to dedicated task
               displayName: Replace Config Tokens
