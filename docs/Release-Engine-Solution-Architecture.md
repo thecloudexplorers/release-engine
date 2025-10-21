@@ -8,33 +8,32 @@ The Release Engine is a comprehensive three-tier solution developed by The Cloud
 
 The solution follows a layered architecture pattern with clear separation of concerns:
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│           Configuration Layer (Facade)                   │
-│    release-engine-storage-account-example-configuration  │
-│                                                         │
-│  • Simple configuration files                           │
-│  • Environment-specific variables                        │
-│  • Pipeline triggers and basic settings                 │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────────┐
-│              Abstraction Layer                          │
-│     release-engine-example-workload-pattern             │
-│                                                         │
-│  • Workload patterns and templates                     │
-│  • Infrastructure as Code (Bicep)                      │
-│  • Pattern-specific configurations                     │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────────┐
-│                Core Layer                               │
-│              release-engine                             │
-│                                                         │
-│  • Reusable pipeline components                        │
-│  • PowerShell deployment scripts                       │
-│  • Orchestrators, stages, jobs, and steps             │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Config["🎭 Configuration Layer (Facade)"]
+        ConfigRepo["📁 release-engine-storage-account-example-configuration"]
+        ConfigFeatures["• Simple configuration files<br/>• Environment-specific variables<br/>• Pipeline triggers and basic settings"]
+    end
+    
+    subgraph Abstract["🔧 Abstraction Layer"]
+        AbstractRepo["📁 release-engine-example-workload-pattern"]
+        AbstractFeatures["• Workload patterns and templates<br/>• Infrastructure as Code (Bicep)<br/>• Pattern-specific configurations"]
+    end
+    
+    subgraph Core["⚙️ Core Layer"]
+        CoreRepo["📁 release-engine"]
+        CoreFeatures["• Reusable pipeline components<br/>• PowerShell deployment scripts<br/>• Orchestrators, stages, jobs, and steps"]
+    end
+    
+    Config --> Abstract
+    Abstract --> Core
+    
+    style Config fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    style Abstract fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style Core fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    style ConfigRepo fill:#b3e5fc,stroke:#0277bd,stroke-width:1px,color:#000
+    style AbstractRepo fill:#e1bee7,stroke:#8e24aa,stroke-width:1px,color:#000
+    style CoreRepo fill:#c8e6c9,stroke:#388e3c,stroke-width:1px,color:#000
 ```
 
 ## Repository Structure and Responsibilities
@@ -70,11 +69,18 @@ The solution follows a layered architecture pattern with clear separation of con
 
 **Structure**:
 
-```text
-patterns/
-├── multi_stage_pattern/          # Complex multi-stage deployments
-├── single_resource_pattern/      # Simple single-resource deployments
-└── subscription_scope_pattern/   # Subscription-level deployments
+```mermaid
+graph LR
+    subgraph Patterns["📁 patterns/"]
+        Multi["🏗️ multi_stage_pattern/<br/>⭐⭐⭐ Complex multi-stage deployments"]
+        Single["📦 single_resource_pattern/<br/>⭐ Simple single-resource deployments"] 
+        Subscription["🌐 subscription_scope_pattern/<br/>⭐⭐ Subscription-level deployments"]
+    end
+    
+    style Patterns fill:#f8f9fa,stroke:#6c757d,stroke-width:2px,color:#000
+    style Multi fill:#fff3cd,stroke:#856404,stroke-width:1px,color:#000
+    style Single fill:#d1ecf1,stroke:#0c5460,stroke-width:1px,color:#000
+    style Subscription fill:#d4edda,stroke:#155724,stroke-width:1px,color:#000
 ```
 
 **Pattern Components**:
@@ -95,15 +101,45 @@ patterns/
 
 **Structure**:
 
-```text
-├── azure-pipelines.yml          # Main pipeline entry point
-└── _config/
-    ├── metadata.yml             # Workload metadata and global settings
-    ├── environments/
-    │   ├── vars-development.yml # Development environment variables
-    │   ├── vars-production.yml  # Production environment variables
-    │   └── vars-test.yml        # Test environment variables
-    └── parameters/              # Bicep parameter files
+```mermaid
+graph TD
+    subgraph ConfigRoot["📁 Configuration Repository"]
+        Pipeline["📄 azure-pipelines.yml<br/>🎯 Main pipeline entry point"]
+        ConfigDir["📁 _config/"]
+    end
+    
+    subgraph ConfigDetails["📁 _config/ Structure"]
+        Metadata["📄 metadata.yml<br/>⚙️ Workload metadata and global settings"]
+        EnvDir["📁 environments/"]
+        ParamDir["📁 parameters/"]
+        
+        subgraph Environments["📁 environments/"]
+            DevVars["📄 vars-development.yml<br/>🔧 Development environment variables"]
+            TestVars["📄 vars-test.yml<br/>🧪 Test environment variables"]  
+            ProdVars["📄 vars-production.yml<br/>🏭 Production environment variables"]
+        end
+        
+        subgraph Parameters["📁 parameters/"]
+            ParamFiles["📄 *.parameters.json<br/>⚡ Bicep parameter files"]
+        end
+    end
+    
+    ConfigDir --> Metadata
+    ConfigDir --> EnvDir
+    ConfigDir --> ParamDir
+    EnvDir --> Environments
+    ParamDir --> Parameters
+    
+    style ConfigRoot fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style ConfigDetails fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style Pipeline fill:#bbdefb,stroke:#1565c0,stroke-width:1px,color:#000
+    style Metadata fill:#e1bee7,stroke:#8e24aa,stroke-width:1px,color:#000
+    style Environments fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,color:#000
+    style Parameters fill:#ffecb3,stroke:#f57c00,stroke-width:2px,color:#000
+    style DevVars fill:#dcedc8,stroke:#689f38,stroke-width:1px,color:#000
+    style TestVars fill:#fff9c4,stroke:#fbc02d,stroke-width:1px,color:#000
+    style ProdVars fill:#ffcdd2,stroke:#d32f2f,stroke-width:1px,color:#000
+    style ParamFiles fill:#ffe0b2,stroke:#f57c00,stroke-width:1px,color:#000
 ```
 
 ## Design Patterns and Principles
@@ -151,6 +187,40 @@ variables:
 2. **Deploy Stages**: Sequential deployment across environments
 3. **Dependency Management**: Automatic handling of inter-stage dependencies
 4. **Environment Promotion**: Controlled promotion from dev → test → production
+
+```mermaid
+graph LR
+    subgraph Pipeline["🔄 Release Pipeline Flow"]
+        Build["🏗️ Build Stage<br/>• Validate Bicep<br/>• Build artifacts<br/>• Security scans"]
+        
+        Dev["🔧 Development<br/>• Deploy to dev<br/>• Run tests<br/>• Validate deployment"]
+        
+        Test["🧪 Test Environment<br/>• Deploy to test<br/>• Integration tests<br/>• Performance validation"]
+        
+        Prod["🏭 Production<br/>• Deploy to prod<br/>• Health checks<br/>• Monitoring setup"]
+    end
+    
+    subgraph Gates["🛡️ Quality Gates"]
+        DevGate["✅ Dev Gate<br/>• Deployment success<br/>• Basic tests pass"]
+        TestGate["✅ Test Gate<br/>• All tests pass<br/>• Approval required"]
+        ProdGate["✅ Prod Gate<br/>• Manual approval<br/>• Change board approval"]
+    end
+    
+    Build --> Dev
+    Dev --> DevGate
+    DevGate --> Test
+    Test --> TestGate
+    TestGate --> Prod
+    Prod --> ProdGate
+    
+    style Build fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Dev fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    style Test fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style Prod fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000
+    style DevGate fill:#f1f8e9,stroke:#558b2f,stroke-width:1px,color:#000
+    style TestGate fill:#fff8e1,stroke:#f9a825,stroke-width:1px,color:#000
+    style ProdGate fill:#fce4ec,stroke:#c2185b,stroke-width:1px,color:#000
+```
 
 #### Stage Dependencies
 
@@ -315,6 +385,44 @@ The Release Engine solution uses a template-based approach where the **abstracti
 **Repository**: `release-engine-storage-account-example-configuration`
 **Purpose**: Template for creating new configuration repositories
 **Usage**: Clone this repository for each workload you want to deploy
+
+```mermaid
+graph TD
+    subgraph Organization["🏢 Organization Level (One Time Setup)"]
+        OrgPattern["📦 Clone Workload Pattern Template<br/>release-engine-example-workload-pattern<br/>➡️ release-engine-myorg-patterns"]
+        OrgCustomize["⚙️ Customize for Organization<br/>• Update service connections<br/>• Add org-specific patterns<br/>• Set organizational standards"]
+    end
+    
+    subgraph PerWorkload["🚀 Per Workload (Multiple Times)"]
+        WorkloadConfig["📋 Clone Configuration Template<br/>release-engine-storage-account-example-configuration<br/>➡️ release-engine-myapp-configuration"]
+        WorkloadSetup["🔧 Configure Workload<br/>• Select pattern from org repo<br/>• Set environment variables<br/>• Define parameter files"]
+        Deploy["🎯 Deploy Workload<br/>• Trigger pipeline<br/>• Automatic orchestration<br/>• Multi-environment deployment"]
+    end
+    
+    subgraph Maintenance["🔄 Ongoing Maintenance"]
+        Upstream["⬆️ Sync with Upstream<br/>• Monthly sync recommended<br/>• Apply security updates<br/>• Merge improvements"]
+        Updates["📈 Update Patterns<br/>• Add new patterns<br/>• Update existing patterns<br/>• Share improvements upstream"]
+    end
+    
+    OrgPattern --> OrgCustomize
+    OrgCustomize --> WorkloadConfig
+    WorkloadConfig --> WorkloadSetup
+    WorkloadSetup --> Deploy
+    Deploy --> Upstream
+    Upstream --> Updates
+    Updates --> WorkloadConfig
+    
+    style Organization fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    style PerWorkload fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    style Maintenance fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    style OrgPattern fill:#dcedc8,stroke:#689f38,stroke-width:1px,color:#000
+    style OrgCustomize fill:#c8e6c9,stroke:#388e3c,stroke-width:1px,color:#000
+    style WorkloadConfig fill:#bbdefb,stroke:#1565c0,stroke-width:1px,color:#000
+    style WorkloadSetup fill:#90caf9,stroke:#1976d2,stroke-width:1px,color:#000
+    style Deploy fill:#64b5f6,stroke:#1565c0,stroke-width:1px,color:#000
+    style Upstream fill:#ffcc02,stroke:#f57c00,stroke-width:1px,color:#000
+    style Updates fill:#ffb74d,stroke:#ef6c00,stroke-width:1px,color:#000
+```
 
 ### Getting Started with Templates
 
