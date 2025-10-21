@@ -81,6 +81,18 @@ graph LR
     style Multi fill:#fff3cd,stroke:#856404,stroke-width:1px,color:#000
     style Single fill:#d1ecf1,stroke:#0c5460,stroke-width:1px,color:#000
     style Subscription fill:#d4edda,stroke:#155724,stroke-width:1px,color:#000
+```mermaid
+graph LR
+    subgraph Patterns["📁 patterns/"]
+        Multi["🏗️ multi_stage_pattern/<br/>⭐⭐⭐ Complex multi-stage deployments"]
+        Single["📦 single_resource_pattern/<br/>⭐ Simple single-resource deployments"] 
+        Subscription["🌐 subscription_scope_pattern/<br/>⭐⭐ Subscription-level deployments"]
+    end
+    
+    style Patterns fill:#f8f9fa,stroke:#6c757d,stroke-width:2px,color:#000
+    style Multi fill:#fff3cd,stroke:#856404,stroke-width:1px,color:#000
+    style Single fill:#d1ecf1,stroke:#0c5460,stroke-width:1px,color:#000
+    style Subscription fill:#d4edda,stroke:#155724,stroke-width:1px,color:#000
 ```
 
 **Pattern Components**:
@@ -385,44 +397,6 @@ The Release Engine solution uses a template-based approach where the **abstracti
 **Repository**: `release-engine-config-template`
 **Purpose**: Template for creating new configuration repositories
 **Usage**: Clone this repository for each workload you want to deploy
-
-```mermaid
-graph TD
-    subgraph Organization["🏢 Organization Level (One Time Setup)"]
-        OrgPattern["📦 Clone Workload Pattern Template<br/>release-engine-pattern-template<br/>➡️ release-engine-myorg-patterns"]
-        OrgCustomize["⚙️ Customize for Organization<br/>• Update service connections<br/>• Add org-specific patterns<br/>• Set organizational standards"]
-    end
-    
-    subgraph PerWorkload["🚀 Per Workload (Multiple Times)"]
-        WorkloadConfig["📋 Clone Configuration Template<br/>release-engine-config-template<br/>➡️ release-engine-myapp-configuration"]
-        WorkloadSetup["🔧 Configure Workload<br/>• Select pattern from org repo<br/>• Set environment variables<br/>• Define parameter files"]
-        Deploy["🎯 Deploy Workload<br/>• Trigger pipeline<br/>• Automatic orchestration<br/>• Multi-environment deployment"]
-    end
-    
-    subgraph Maintenance["🔄 Ongoing Maintenance"]
-        Upstream["⬆️ Sync with Upstream<br/>• Monthly sync recommended<br/>• Apply security updates<br/>• Merge improvements"]
-        Updates["📈 Update Patterns<br/>• Add new patterns<br/>• Update existing patterns<br/>• Share improvements upstream"]
-    end
-    
-    OrgPattern --> OrgCustomize
-    OrgCustomize --> WorkloadConfig
-    WorkloadConfig --> WorkloadSetup
-    WorkloadSetup --> Deploy
-    Deploy --> Upstream
-    Upstream --> Updates
-    Updates --> WorkloadConfig
-    
-    style Organization fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
-    style PerWorkload fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
-    style Maintenance fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
-    style OrgPattern fill:#dcedc8,stroke:#689f38,stroke-width:1px,color:#000
-    style OrgCustomize fill:#c8e6c9,stroke:#388e3c,stroke-width:1px,color:#000
-    style WorkloadConfig fill:#bbdefb,stroke:#1565c0,stroke-width:1px,color:#000
-    style WorkloadSetup fill:#90caf9,stroke:#1976d2,stroke-width:1px,color:#000
-    style Deploy fill:#64b5f6,stroke:#1565c0,stroke-width:1px,color:#000
-    style Upstream fill:#ffcc02,stroke:#f57c00,stroke-width:1px,color:#000
-    style Updates fill:#ffb74d,stroke:#ef6c00,stroke-width:1px,color:#000
-```
 
 ### Getting Started with Templates
 
