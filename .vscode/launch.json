@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Current Test File",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "Invoke-Pester -Path ${file} -Output Detailed",
+      "createTemporaryIntegratedConsole": true
+    },
+    {
+      "name": "Run All Tests",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "Invoke-Pester -Path '${workspaceFolder}/tests' -Output Detailed",
+      "createTemporaryIntegratedConsole": true
+    },
+    {
+      "name": "Run Pipeline Tests",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "Invoke-Pester -Path '${workspaceFolder}/tests/pipelines' -Output Detailed",
+      "createTemporaryIntegratedConsole": true
+    },
+    {
+      "name": "Debug Current Test File",
+      "type": "PowerShell",
+      "request": "launch",
+      "script": "Invoke-Pester -Path ${file} -Output Detailed",
+      "createTemporaryIntegratedConsole": true,
+      "presentation": {
+        "hidden": false,
+        "group": "Test",
+        "order": 1
+      }
+    }
+  ]
+}

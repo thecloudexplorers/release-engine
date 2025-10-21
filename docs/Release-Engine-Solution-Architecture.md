@@ -11,12 +11,12 @@ The solution follows a layered architecture pattern with clear separation of con
 ```mermaid
 graph TD
     subgraph Config["🎭 Configuration Layer (Facade)"]
-        ConfigRepo["📁 release-engine-storage-account-example-configuration"]
+        ConfigRepo["📁 release-engine-config-template"]
         ConfigFeatures["• Simple configuration files<br/>• Environment-specific variables<br/>• Pipeline triggers and basic settings"]
     end
     
     subgraph Abstract["🔧 Abstraction Layer"]
-        AbstractRepo["📁 release-engine-example-workload-pattern"]
+        AbstractRepo["📁 release-engine-pattern-template"]
         AbstractFeatures["• Workload patterns and templates<br/>• Infrastructure as Code (Bicep)<br/>• Pattern-specific configurations"]
     end
     
@@ -63,7 +63,7 @@ graph TD
 - **iac.build.stage.yml**: Infrastructure build stage template
 - **iac.deploy.stage.yml**: Infrastructure deployment stage template with environment dependency logic
 
-### 2. Abstraction Layer: release-engine-example-workload-pattern
+### 2. Abstraction Layer: release-engine-pattern-template
 
 **Purpose**: Intermediate layer defining "how" workloads are deployed through reusable patterns.
 
@@ -95,7 +95,7 @@ graph LR
 - Parameterized infrastructure definitions
 - Environment-agnostic templates
 
-### 3. Configuration Layer: release-engine-storage-account-example-configuration
+### 3. Configuration Layer: release-engine-config-template
 
 **Purpose**: Facade layer providing simple configuration interface for end users.
 
@@ -262,7 +262,7 @@ environments:
 
 ### Creating New Workloads
 
-1. **Choose Pattern**: Select appropriate pattern from `release-engine-example-workload-pattern`
+1. **Choose Pattern**: Select appropriate pattern from `release-engine-pattern-template`
 2. **Configure Infrastructure**: Customize `workload.bicep` for specific resources
 3. **Set Pipeline Logic**: Adjust `workload.yml` for deployment orchestration
 4. **Create Configuration**: Set up simple configuration in dedicated configuration repository
@@ -317,7 +317,7 @@ resources:
       name: thecloudexplorers/release-engine
     - repository: workload
       type: github
-      name: thecloudexplorers/release-engine-example-workload-pattern
+      name: thecloudexplorers/release-engine-pattern-template
 ```
 
 ### Template Inheritance
@@ -377,24 +377,24 @@ The Release Engine solution uses a template-based approach where the **abstracti
 ### Template Repositories
 
 #### 1. Workload Pattern Template Repository
-**Repository**: `release-engine-example-workload-pattern`
+**Repository**: `release-engine-pattern-template`
 **Purpose**: Template for creating new workload pattern repositories
 **Usage**: Clone this repository to create your own workload patterns
 
 #### 2. Configuration Template Repository
-**Repository**: `release-engine-storage-account-example-configuration`
+**Repository**: `release-engine-config-template`
 **Purpose**: Template for creating new configuration repositories
 **Usage**: Clone this repository for each workload you want to deploy
 
 ```mermaid
 graph TD
     subgraph Organization["🏢 Organization Level (One Time Setup)"]
-        OrgPattern["📦 Clone Workload Pattern Template<br/>release-engine-example-workload-pattern<br/>➡️ release-engine-myorg-patterns"]
+        OrgPattern["📦 Clone Workload Pattern Template<br/>release-engine-pattern-template<br/>➡️ release-engine-myorg-patterns"]
         OrgCustomize["⚙️ Customize for Organization<br/>• Update service connections<br/>• Add org-specific patterns<br/>• Set organizational standards"]
     end
     
     subgraph PerWorkload["🚀 Per Workload (Multiple Times)"]
-        WorkloadConfig["📋 Clone Configuration Template<br/>release-engine-storage-account-example-configuration<br/>➡️ release-engine-myapp-configuration"]
+        WorkloadConfig["📋 Clone Configuration Template<br/>release-engine-config-template<br/>➡️ release-engine-myapp-configuration"]
         WorkloadSetup["🔧 Configure Workload<br/>• Select pattern from org repo<br/>• Set environment variables<br/>• Define parameter files"]
         Deploy["🎯 Deploy Workload<br/>• Trigger pipeline<br/>• Automatic orchestration<br/>• Multi-environment deployment"]
     end
@@ -430,8 +430,8 @@ graph TD
 
 ```bash
 # Clone the workload pattern template
-git clone https://github.com/thecloudexplorers/release-engine-example-workload-pattern.git
-cd release-engine-example-workload-pattern
+git clone https://github.com/thecloudexplorers/release-engine-pattern-template.git
+cd release-engine-pattern-template
 
 # Rename the repository for your organization
 # Example: release-engine-myorg-workload-patterns
@@ -441,8 +441,8 @@ cd release-engine-example-workload-pattern
 
 ```bash
 # Clone the configuration template for your specific workload
-git clone https://github.com/thecloudexplorers/release-engine-storage-account-example-configuration.git
-cd release-engine-storage-account-example-configuration
+git clone https://github.com/thecloudexplorers/release-engine-config-template.git
+cd release-engine-config-template
 
 # Rename the repository for your workload
 # Example: release-engine-myapp-storage-configuration
@@ -509,10 +509,10 @@ Consider contributing when you:
 #### Contribution Process
 
 1. **Fork the Upstream Repository**
-   ```bash
-   # Fork on GitHub, then clone your fork
-   git clone https://github.com/yourusername/release-engine-example-workload-pattern.git
-   ```
+    ```bash
+    # Fork on GitHub, then clone your fork
+    git clone https://github.com/yourusername/release-engine-pattern-template.git
+    ```
 
 2. **Create Feature Branch**
    ```bash
@@ -543,8 +543,8 @@ Consider contributing when you:
 - **[release-engine](https://github.com/thecloudexplorers/release-engine)** - Core pipeline components and orchestrators
 
 #### Template Repositories
-- **[release-engine-example-workload-pattern](https://github.com/thecloudexplorers/release-engine-example-workload-pattern)** - Workload pattern template
-- **[release-engine-storage-account-example-configuration](https://github.com/thecloudexplorers/release-engine-storage-account-example-configuration)** - Configuration template
+- **[release-engine-pattern-template](https://github.com/thecloudexplorers/release-engine-pattern-template)** - Workload pattern template
+- **[release-engine-config-template](https://github.com/thecloudexplorers/release-engine-config-template)** - Configuration template
 
 #### Cloud Explorer Workload Examples
 

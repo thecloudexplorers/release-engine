@@ -7,8 +7,8 @@ This document provides step-by-step instructions for creating new patterns based
 ## Steps
 
 1. **Folder Structure**
-   - Create a new folder under `release-engine-example-workload-pattern/patterns/` with the name of your new pattern.
-   - Example: `release-engine-example-workload-pattern/patterns/<new_pattern_name>/`.
+   - Create a new folder under `release-engine-pattern-template/patterns/` with the name of your new pattern.
+   - Example: `release-engine-pattern-template/patterns/<new_pattern_name>/`.
 
 2. **Required Files**
    - Each pattern must include the following files:
@@ -74,7 +74,7 @@ This document provides step-by-step instructions for creating new patterns based
          workloadSettings:
            name: <new_pattern_name>
            configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
-           workloadDefinitionRepositoryName: release-engine-example-workload-pattern
+           workloadDefinitionRepositoryName: release-engine-pattern-template
            environments: ${{ parameters.platformWorkloadSettings.environments }}
            workloadArtifactsPath: /patterns/<new_pattern_name>
            stages:
