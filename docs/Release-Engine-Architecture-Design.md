@@ -172,8 +172,8 @@ graph TB
     Pattern <--> GitHub
     Core <--> GitHub
     
-    style ReleaseEngine fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    style External fill:#f5f5f5,stroke:#757575,stroke-width:1px
+    style ReleaseEngine fill:#276749,stroke:#38a169,stroke-width:2px,color:#ffffff
+    style External fill:#4a5568,stroke:#718096,stroke-width:1px,color:#ffffff
 ```
 
 **Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L13-L37
@@ -202,9 +202,9 @@ graph TD
     Config --> Abstract
     Abstract --> Core
     
-    style Config fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
-    style Abstract fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px  
-    style Core fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    style Config fill:#2b6cb0,stroke:#3182ce,stroke-width:2px,color:#ffffff
+    style Abstract fill:#805ad5,stroke:#9f7aea,stroke-width:2px,color:#ffffff
+    style Core fill:#276749,stroke:#38a169,stroke-width:2px,color:#ffffff
 ```
 
 **Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L13-L37
@@ -241,25 +241,25 @@ graph TD
 
 ```mermaid
 graph TB
-    subgraph Tenant["🏢 Azure Tenant"]
-        subgraph DevSub["📊 Development Subscription"]
-            DevRG["🗂️ Development Resource Groups"]
+    subgraph Tenant["Azure Tenant"]
+        subgraph DevSub["Development Subscription"]
+            DevRG["Development Resource Groups"]
         end
         
-        subgraph TestSub["🧪 Test Subscription"] 
-            TestRG["🗂️ Test Resource Groups"]
+        subgraph TestSub["Test Subscription"]
+            TestRG["Test Resource Groups"]
         end
         
-        subgraph ProdSub["🏭 Production Subscription"]
-            ProdRG["🗂️ Production Resource Groups"]
+        subgraph ProdSub["Production Subscription"]
+            ProdRG["Production Resource Groups"]
         end
     end
     
-    subgraph Pipeline["🔄 CI/CD Pipeline"]
-        Build["🏗️ Build Stage"]
-        DeployDev["📊 Deploy to Dev"]
-        DeployTest["🧪 Deploy to Test"]
-        DeployProd["🏭 Deploy to Prod"]
+    subgraph Pipeline["CI/CD Pipeline"]
+        Build["Build Stage"]
+        DeployDev["Deploy to Dev"]
+        DeployTest["Deploy to Test"]
+        DeployProd["Deploy to Prod"]
     end
     
     Build --> DeployDev
@@ -269,6 +269,12 @@ graph TB
     DeployDev --> DevRG
     DeployTest --> TestRG
     DeployProd --> ProdRG
+    
+    style Tenant fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#ffffff
+    style Pipeline fill:#2b6cb0,stroke:#3182ce,stroke-width:2px,color:#ffffff
+    style DevSub fill:#276749,stroke:#38a169,stroke-width:1px,color:#ffffff
+    style TestSub fill:#b7791f,stroke:#d69e2e,stroke-width:1px,color:#ffffff
+    style ProdSub fill:#c53030,stroke:#e53e3e,stroke-width:1px,color:#ffffff
 ```
 
 **Evidence**: {Placeholder: Subscription strategy documentation needed}
@@ -355,20 +361,30 @@ resources:
 
 ```mermaid
 graph TB
-    subgraph Config["📁 Configuration Repository"]
-        Pipeline["📄 azure-pipelines.yml"]
-        Metadata["📄 metadata.yml"]
+    subgraph Config["Configuration Repository"]
+        Pipeline["azure-pipelines.yml"]
+        Metadata["metadata.yml"]
         
-        subgraph Environments["📁 environments/"]
-            DevVars["📄 vars-development.yml"]
-            TestVars["📄 vars-test.yml"]
-            ProdVars["📄 vars-production.yml"]
+        subgraph Environments["environments/"]
+            DevVars["vars-development.yml"]
+            TestVars["vars-test.yml"]
+            ProdVars["vars-production.yml"]
         end
         
-        subgraph Parameters["📁 parameters/"]
-            ParamFiles["📄 *.parameters.json"]
+        subgraph Parameters["parameters/"]
+            ParamFiles["*.parameters.json"]
         end
     end
+    
+    style Config fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#ffffff
+    style Environments fill:#276749,stroke:#38a169,stroke-width:1px,color:#ffffff
+    style Parameters fill:#b7791f,stroke:#d69e2e,stroke-width:1px,color:#ffffff
+    style Pipeline fill:#2b6cb0,stroke:#3182ce,stroke-width:1px,color:#ffffff
+    style Metadata fill:#2b6cb0,stroke:#3182ce,stroke-width:1px,color:#ffffff
+    style DevVars fill:#38a169,stroke:#48bb78,stroke-width:1px,color:#ffffff
+    style TestVars fill:#d69e2e,stroke:#ed8936,stroke-width:1px,color:#ffffff
+    style ProdVars fill:#e53e3e,stroke:#f56565,stroke-width:1px,color:#ffffff
+    style ParamFiles fill:#ed8936,stroke:#f6ad55,stroke-width:1px,color:#ffffff
 ```
 
 **Evidence**: release-engine-storage-account-example-configuration/_config/ directory structure
@@ -407,19 +423,25 @@ Pipeline orchestration through template extension:
 
 ```mermaid
 graph LR
-    subgraph Pipeline["🔄 Release Pipeline Flow"]
-        Build["🏗️ Build Stage<br/>• Validate Bicep<br/>• Build artifacts<br/>• Security scans"]
+    subgraph Pipeline["Release Pipeline Flow"]
+        Build["Build Stage<br/>• Validate Bicep<br/>• Build artifacts<br/>• Security scans"]
         
-        Dev["🔧 Development<br/>• Deploy to dev<br/>• Run tests<br/>• Validate deployment"]
+        Dev["Development<br/>• Deploy to dev<br/>• Run tests<br/>• Validate deployment"]
         
-        Test["🧪 Test Environment<br/>• Deploy to test<br/>• Integration tests<br/>• Performance validation"]
+        Test["Test Environment<br/>• Deploy to test<br/>• Integration tests<br/>• Performance validation"]
         
-        Prod["🏭 Production<br/>• Deploy to prod<br/>• Health checks<br/>• Monitoring setup"]
+        Prod["Production<br/>• Deploy to prod<br/>• Health checks<br/>• Monitoring setup"]
     end
     
     Build --> Dev
     Dev --> Test  
     Test --> Prod
+    
+    style Pipeline fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#ffffff
+    style Build fill:#2b6cb0,stroke:#3182ce,stroke-width:1px,color:#ffffff
+    style Dev fill:#276749,stroke:#38a169,stroke-width:1px,color:#ffffff
+    style Test fill:#b7791f,stroke:#d69e2e,stroke-width:1px,color:#ffffff
+    style Prod fill:#c53030,stroke:#e53e3e,stroke-width:1px,color:#ffffff
 ```
 
 **Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L185-L220
