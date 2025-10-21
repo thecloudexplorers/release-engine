@@ -185,12 +185,12 @@ The Release Engine implements a three-tier architecture using the Facade Pattern
 ```mermaid
 graph TD
     subgraph Config["🎭 Configuration Layer (Facade)"]
-        ConfigRepo["📁 release-engine-storage-account-example-configuration"]
+        ConfigRepo["📁 release-engine-config-template"]
         ConfigFiles["📄 Simple configuration files<br/>📄 Environment variables<br/>📄 Parameter files"]
     end
     
     subgraph Abstract["🔧 Abstraction Layer"]
-        PatternRepo["📁 release-engine-example-workload-pattern"]
+        PatternRepo["📁 release-engine-pattern-template"]
         Patterns["🏗️ Workload patterns<br/>📜 Bicep templates<br/>⚙️ Pipeline configurations"]
     end
     
@@ -233,7 +233,7 @@ graph TD
 | **Subscription Scope Pattern** | Subscription-level deployments | Bicep + YAML | `/patterns/subscription_scope_pattern/` |
 | **Multi-Stage Pattern** | Complex multi-stage deployments | Bicep + YAML | `/patterns/multi_stage_pattern/` |
 
-**Evidence**: release-engine-example-workload-pattern/patterns/ directory structure
+**Evidence**: release-engine-pattern-template/patterns/ directory structure
 
 ### 4.4 Implementation View
 
@@ -281,7 +281,7 @@ graph TB
 
 #### 4.4.2 Resource Deployment Pattern
 
-**Evidence**: release-engine-example-workload-pattern/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L1-L25
+**Evidence**: release-engine-pattern-template/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L1-L25
 
 The solution uses Azure Verified Modules (AVM) where available:
 
@@ -295,7 +295,7 @@ module resourceGroup 'br/public:avm/res/resources/resource-group:0.4.2' = {
 }
 ```
 
-**Evidence**: release-engine-example-workload-pattern/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L18-L25
+**Evidence**: release-engine-pattern-template/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L18-L25
 
 #### 4.4.3 Network Architecture
 
@@ -311,7 +311,7 @@ module resourceGroup 'br/public:avm/res/resources/resource-group:0.4.2' = {
 
 The solution requires service principals for Azure deployments, configured per environment:
 
-**Evidence**: release-engine-storage-account-example-configuration/azure-pipelines.yml#L1-L35
+**Evidence**: release-engine-config-template/azure-pipelines.yml#L1-L35
 
 ```yaml
 resources:
@@ -387,7 +387,7 @@ graph TB
     style ParamFiles fill:#ed8936,stroke:#f6ad55,stroke-width:1px,color:#ffffff
 ```
 
-**Evidence**: release-engine-storage-account-example-configuration/_config/ directory structure
+**Evidence**: release-engine-config-template/_config/ directory structure
 
 ### 6.2 Integration Interfaces
 
@@ -395,7 +395,7 @@ graph TB
 
 Repository references enable template inheritance:
 
-**Evidence**: release-engine-storage-account-example-configuration/azure-pipelines.yml#L4-L15
+**Evidence**: release-engine-config-template/azure-pipelines.yml#L4-L15
 
 ```yaml
 resources:
@@ -411,7 +411,7 @@ resources:
 
 Pipeline orchestration through template extension:
 
-**Evidence**: release-engine-storage-account-example-configuration/azure-pipelines.yml#L20-L35
+**Evidence**: release-engine-config-template/azure-pipelines.yml#L20-L35
 
 ---
 
@@ -458,7 +458,7 @@ The orchestrator coordinates build and deployment stages with dependency managem
 
 #### 7.2.1 Bicep Template Structure
 
-**Evidence**: release-engine-example-workload-pattern/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L1-L10
+**Evidence**: release-engine-pattern-template/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L1-L10
 
 ```bicep
 metadata resources = {
@@ -556,7 +556,7 @@ Debug capabilities are built into the orchestrator for troubleshooting.
 
 **Decision**: Prefer Azure Verified Modules (AVM) where available
 
-**Evidence**: release-engine-example-workload-pattern/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L18-L25
+**Evidence**: release-engine-pattern-template/patterns/multi_stage_pattern/multi_stage_pattern.prerequisite.bicep#L18-L25
 
 {Placeholder: Additional ADRs needed for key architectural decisions}
 

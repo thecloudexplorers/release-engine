@@ -27,7 +27,7 @@ Configuration Layer (Simple) → Abstraction Layer (Patterns) → Core Layer (Pi
    - PowerShell deployment scripts
    - Foundation orchestrators and templates
 
-2. **release-engine-example-workload-pattern** (Abstraction Layer)
+2. **release-engine-pattern-template** (Abstraction Layer)
    - Workload deployment patterns
    - Infrastructure as Code templates
    - Pattern-specific configurations
@@ -43,8 +43,8 @@ Configuration Layer (Simple) → Abstraction Layer (Patterns) → Core Layer (Pi
 
 ### Template Repositories
 
-- **[release-engine-example-workload-pattern](https://github.com/thecloudexplorers/release-engine-example-workload-pattern)** - Template for workload patterns
-- **[release-engine-storage-account-example-configuration](https://github.com/thecloudexplorers/release-engine-storage-account-example-configuration)** - Template for configurations
+- **[release-engine-pattern-template](https://github.com/thecloudexplorers/release-engine-pattern-template)** - Template for workload patterns
+- **[release-engine-config-template](https://github.com/thecloudexplorers/release-engine-config-template)** - Template for configurations
 
 ### Quick Start Process
 
