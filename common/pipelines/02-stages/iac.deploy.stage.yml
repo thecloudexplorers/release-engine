@@ -9,7 +9,6 @@ stages:
           - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             variables:
               - template: /${{ parameters.workloadSettings.configurationFilePath }}/environments/vars-${{ env.name }}.yml@self
-              - template: /common/pipelines/_config/release-engine.config.yml@release-engine
               
               - name: lastWorkloadInStage
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}

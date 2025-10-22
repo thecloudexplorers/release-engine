@@ -7,8 +7,6 @@ stages:
     - stage: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}      
       displayName: 'Build - ${{ stage.infrastructure.iac.displayName }}'
       dependsOn:
-      variables:
-        - template: /common/pipelines/_config/release-engine.config.yml@release-engine
       jobs:
         - template: /common/pipelines/03-jobs/iac.build.job.yml
           parameters:
