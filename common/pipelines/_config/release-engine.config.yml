@@ -1,4 +1,4 @@
-variables:
-  releaseEngineRepositoryName: release-engine
-  configurationArtifactName: configuration
-  workloadArtifactName: $(workload)
+# variables:
+#   releaseEngineRepositoryName: release-engine
+#   configurationArtifactName: configuration
+#   workloadArtifactName: $(workload)
