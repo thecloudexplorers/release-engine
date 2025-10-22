@@ -113,15 +113,15 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           # Create release notes
-          cat > release_notes.md << 'EOF'
-          ## Release ${{ steps.new-version.outputs.new-version }}
+          cat > release_notes.md << EOF
+          ## Release ${NEW_VERSION}
           
-          ${{ github.event.pull_request.body }}
+          ${PR_BODY}
           
           ---
           
-          **Merged PR:** #${{ github.event.pull_request.number }}
-          **Author:** @${{ github.event.pull_request.user.login }}
+          **Merged PR:** #${PR_NUMBER}
+          **Author:** @${PR_AUTHOR}
           EOF
           
           # Create the GitHub release
