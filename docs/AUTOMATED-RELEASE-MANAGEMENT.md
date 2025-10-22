@@ -20,7 +20,9 @@ The workflow uses **semantic versioning** (MAJOR.MINOR.PATCH) and determines the
   - Use for new features that are backward-compatible
 - **`patch` label**: Increments the patch version (e.g., v1.2.3 → v1.2.4)
   - Use for bug fixes and small improvements
-- **No label**: Defaults to patch version increment
+- **`bug` label**: Increments the patch version (e.g., v1.2.3 → v1.2.4)
+  - Automatically treats bug fixes as patch version increments
+- **No label**: Defaults to minor version increment
 
 ### Release Creation
 
@@ -42,7 +44,8 @@ When a PR is merged, the workflow:
 
 1. **Add a version label** to your PR before merging:
    - Add `major`, `minor`, or `patch` label based on the nature of your changes
-   - If you forget to add a label, the workflow will default to a `patch` bump
+   - Use `bug` label for bug fixes (will be treated as patch version bump)
+   - If you forget to add a label, the workflow will default to a `minor` bump
 
 2. **Write clear PR titles and descriptions**:
    - The PR title becomes the release name
@@ -61,6 +64,7 @@ Ensure these labels exist in the repository:
 - `major` - For major version bumps
 - `minor` - For minor version bumps  
 - `patch` - For patch version bumps
+- `bug` - For bug fixes (treated as patch bumps)
 
 #### Permissions
 
@@ -110,14 +114,14 @@ The workflow is defined in `.github/workflows/release.yml`.
 ### Example 1: Bug Fix Release
 
 1. Create a PR with bug fixes
-2. Add the `patch` label
+2. Add the `bug` label (or `patch` label)
 3. Merge the PR
 4. Result: v1.2.3 → v1.2.4
 
 ### Example 2: New Feature Release
 
 1. Create a PR with a new feature
-2. Add the `minor` label
+2. Add the `minor` label (or no label, as minor is the default)
 3. Merge the PR
 4. Result: v1.2.4 → v1.3.0
 

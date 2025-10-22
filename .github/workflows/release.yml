@@ -41,8 +41,8 @@ jobs:
           PR_LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
         run: |
           # Parse PR labels to determine version bump type
-          # Default to patch if no specific label is found
-          BUMP_TYPE="patch"
+          # Default to minor if no specific label is found, unless it's a bug fix
+          BUMP_TYPE="minor"
           
           if echo "$PR_LABELS" | grep -q "major"; then
             BUMP_TYPE="major"
@@ -53,8 +53,11 @@ jobs:
           elif echo "$PR_LABELS" | grep -q "patch"; then
             BUMP_TYPE="patch"
             echo "Found 'patch' label - will perform patch version bump"
+          elif echo "$PR_LABELS" | grep -q "bug"; then
+            BUMP_TYPE="patch"
+            echo "Found 'bug' label - will perform patch version bump"
           else
-            echo "No version label found - defaulting to patch version bump"
+            echo "No version or bug label found - defaulting to minor version bump"
           fi
           
           echo "bump-type=$BUMP_TYPE" >> $GITHUB_OUTPUT

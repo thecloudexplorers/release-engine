@@ -9,8 +9,9 @@ Before merging your PR to `main`, add ONE of these labels:
 - `major` - For breaking changes (1.0.0 → 2.0.0)
 - `minor` - For new features (1.0.0 → 1.1.0)  
 - `patch` - For bug fixes (1.0.0 → 1.0.1)
+- `bug` - For bug fixes (1.0.0 → 1.0.1, same as patch)
 
-**Note:** If no label is added, defaults to `patch`.
+**Note:** If no label is added, defaults to `minor`.
 
 ### Writing Good PR Descriptions
 
@@ -51,6 +52,7 @@ Ensure these labels exist in the repository:
 gh label create major --description "Major version bump (breaking changes)" --color "d73a4a"
 gh label create minor --description "Minor version bump (new features)" --color "0075ca"
 gh label create patch --description "Patch version bump (bug fixes)" --color "cfd3d7"
+gh label create bug --description "Bug fix (patch version bump)" --color "d73a4a"
 ```
 
 ### Manual Release (if needed)
