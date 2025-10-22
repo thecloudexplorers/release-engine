@@ -1,5 +1,0 @@
-variables:
-  param: value
-  # releaseEngineRepositoryName: release-engine
-  # configurationArtifactName: configuration
-  # workloadArtifactName: $(workload)
