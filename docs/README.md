@@ -23,7 +23,7 @@ Configuration Layer (Simple) → Abstraction Layer (Patterns) → Core Layer (Pi
 
 ### Three Repository Structure
 
-1. **release-engine** (Core Layer)
+1. **release-engine-core** (Core Layer)
    - Reusable pipeline components
    - PowerShell deployment scripts
    - Foundation orchestrators and templates

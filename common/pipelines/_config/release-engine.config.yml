@@ -1,4 +1,0 @@
-variables:
-  releaseEngineRepositoryName: release-engine
-  configurationArtifactName: configuration
-  workloadArtifactName: $(workload)

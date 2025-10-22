@@ -35,7 +35,7 @@ Key documents:
 
 This repository serves as the **Core Layer** in a three-repository solution:
 
-1. **release-engine** (this repo) - Core pipeline components and scripts
+1. **release-engine-core** (this repo) - Core pipeline components and scripts
 2. **release-engine-pattern-template** - Deployment patterns and templates  
 3. **release-engine-*-configuration** - Simple configuration repositories for end users
 
