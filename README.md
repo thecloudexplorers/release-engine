@@ -28,6 +28,7 @@ The Release Engine follows a layered architecture with clear separation of conce
 Key documents:
 
 - [Solution Architecture](./docs/Release-Engine-Solution-Architecture.md) - Detailed architectural overview
+- [Automated Release Management](./docs/AUTOMATED-RELEASE-MANAGEMENT.md) - CI/CD pipeline for automated releases
 - [ADR Template](./docs/adrs/00-adr-template.md) - Architectural decision record template
 
 ## Quick Start

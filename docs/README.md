@@ -8,6 +8,7 @@ The Release Engine is a three-tier solution that simplifies CI/CD pipeline imple
 
 ### Core Documentation
 - **[Release Engine Solution Architecture](./Release-Engine-Solution-Architecture.md)** - Complete architectural overview and implementation guide
+- **[Automated Release Management](./AUTOMATED-RELEASE-MANAGEMENT.md)** - CI/CD pipeline for automated releases
 - **[Technical Assessment](./Technical-Assessment.md)** - Independent technical evaluation and analysis
 - **[Feature Enhancement Roadmap](./Feature-Enhancement-Roadmap.md)** - Future features and improvement suggestions
 
