@@ -9,19 +9,20 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
       
 
-      
-      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
-          - name: releaseEngineCheckoutDirectory
-            value: releaseEngineCheckoutDirectory
-      - ${{ else }}:
-          - name: releaseEngineCheckoutDirectory
-            value: configurationCheckoutDirectory
-      - ${{ if eq(resources.repositories.*.name, 'workload') }}:
-          - name: workloadCheckoutDirectory
-            value: workloadCheckoutDirectory
-      - ${{ else }}:
-          - name: workloadCheckoutDirectory
-            value: configurationCheckoutDirectory
+      - ${{ if eq(coalesce(resources),'') '') }}:
+          
+        - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
+            - name: releaseEngineCheckoutDirectory
+              value: releaseEngineCheckoutDirectory
+        - ${{ else }}:
+            - name: releaseEngineCheckoutDirectory
+              value: configurationCheckoutDirectory
+        - ${{ if eq(resources.repositories.*.name, 'workload') }}:
+            - name: workloadCheckoutDirectory
+              value: workloadCheckoutDirectory
+        - ${{ else }}:
+            - name: workloadCheckoutDirectory
+              value: configurationCheckoutDirectory
 
 
     steps:
@@ -35,12 +36,13 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
-          - checkout: release-engine-core
-            path: releaseEngineCheckoutDirectory
-      - ${{ if eq(resources.repositories.*.name, 'workload') }}:
-          - checkout: workload
-            path: workloadCheckoutDirectory
+      - ${{ if eq(coalesce(resources),'') '') }}:
+          - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
+              - checkout: release-engine-core
+                path: releaseEngineCheckoutDirectory
+          - ${{ if eq(resources.repositories.*.name, 'workload') }}:
+              - checkout: workload
+                path: workloadCheckoutDirectory
 
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
