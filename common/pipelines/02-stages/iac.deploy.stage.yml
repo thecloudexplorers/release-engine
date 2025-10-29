@@ -37,7 +37,7 @@ stages:
                         - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
           
            # non-primary environment and has workload dependency
-            ${{ if and(ne(env.primaryEnvironment, True), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+            ${{ if and(ne(env.primaryEnvironment, False), ne(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
                 - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}                    
 
