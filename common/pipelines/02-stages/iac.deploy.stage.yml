@@ -26,6 +26,11 @@ stages:
                 - build_${{ stage.infrastructure.iac.name }}
                 - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
             
+            # non-primary environment and has workload dependency
+            ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+              dependsOn:
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+
             # non-primary environment and does not have workload dependency
             ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
@@ -35,24 +40,23 @@ stages:
                     - ${{ if eq(dependencyStage.infrastructure.iac.lastInStage, 'true') }}:                  
                         - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
                     
+
+            
+            
+            
+
+            
+            # # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+            # ${{ else }}:
+            #   dependsOn:
+            #     - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+
             # non-primary environment and has workload dependency
                         # non-primary environment and has workload dependency
             #             # non-primary environment and has workload dependency
             # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
             #   dependsOn:
-            #     - ${{ env.name }}_${{ env.infrastructure.iac.dependsOn }}
-            
-            
-            
-            ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-              dependsOn:
-                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-            
-            # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-            # ${{ else }}:
-            dependsOn:
-              - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-            
+            #     - ${{ env.name }}_${{ env.infrastructure.iac.dependsOn }}              
 
 
             jobs:
