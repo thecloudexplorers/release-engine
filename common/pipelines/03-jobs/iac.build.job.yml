@@ -9,7 +9,7 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
       
 
-      - ${{ if eq(coalesce(resources,'') '') }}:
+      - ${{ if eq(coalesce(resources,''), '') }}:
           
         - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
             - name: releaseEngineCheckoutDirectory
@@ -36,7 +36,7 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if eq(coalesce(resources,'') '') }}:
+      - ${{ if eq(coalesce(resources,''), '') }}:
           - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
               - checkout: release-engine-core
                 path: releaseEngineCheckoutDirectory
