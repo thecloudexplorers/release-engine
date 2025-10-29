@@ -19,6 +19,8 @@ stages:
                 value: ${{ env.dependsOn }}
               - name: stageDependsOn
                 value: ${{ stage.infrastructure.iac.dependsOn }}
+              - name: stagePreRequisiteStage
+                value: ${{ stage.infrastructure.iac.preRequisiteStage }}
 
 
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
