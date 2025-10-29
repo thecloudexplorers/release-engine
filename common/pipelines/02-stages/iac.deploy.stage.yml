@@ -58,7 +58,7 @@ stages:
           #       - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             # check if environment is primary, i.e.: development
-            ${{ if eq(env.primaryEnvironment, 'true') }}:
+            ${{ if eq(env.afterBuild, 'true') }}:
               # if there is no dependencies on other stages, it just add the build
               ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
                 dependsOn: build_${{ stage.infrastructure.iac.name }}
