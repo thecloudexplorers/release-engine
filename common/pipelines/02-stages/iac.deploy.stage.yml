@@ -15,24 +15,24 @@ stages:
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
 
             # primary environment and does not have workload dependency
-            ${{ if and(eq(env.primaryEnvironment, True), eq(stage.infrastructure.iac.dependsOn, '')) }}:
+            ${{ if and(eq(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
             
               dependsOn: build_${{ stage.infrastructure.iac.name }}
 
             # primary environment and has workload dependency
-            ${{ elseif and(eq(env.primaryEnvironment, True), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+            ${{ elseif and(eq(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
         
               dependsOn:
                 - build_${{ stage.infrastructure.iac.name }}
                 - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
-
+            
             # non-primary environment and does not have workload dependency
-            ${{ elseif and(eq(env.primaryEnvironment, False), eq(stage.infrastructure.iac.dependsOn, '')) }}:
+            ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
                 # check if last in stage to depend on previous environment deployment
                 - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
                     # get the stage which has lastInStage true and set dependsOn to that environment deployment
-                    - ${{ if eq(dependencyStage.infrastructure.iac.lastInStage, True) }}:                  
+                    - ${{ if eq(dependencyStage.infrastructure.iac.lastInStage, 'true') }}:                  
                         - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
           
            # non-primary environment and has workload dependency            
