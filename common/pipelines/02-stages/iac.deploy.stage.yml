@@ -60,15 +60,16 @@ stages:
             # check if environment is primary 
             ${{ if eq(env.primaryEnvironment, 'true') }}:
               # does not have workload dependency
-              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:              
-                dependsOn: build_${{ stage.infrastructure.iac.name }}
+              ${{ if eq(stage.infrastructure.iac.dependsOn, True) }}:
+                dependsOn:
+                  - build_${{ stage.infrastructure.iac.name }}
+                  - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}            
 
               # primary environment and has workload dependency
               ${{ else }}:          
-                dependsOn:
-                  - build_${{ stage.infrastructure.iac.name }}
-                  - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
-            
+                dependsOn: build_${{ stage.infrastructure.iac.name }}
+                
+                
             ${{ else }}:
 
               # non-primary environment and does not have workload dependency
