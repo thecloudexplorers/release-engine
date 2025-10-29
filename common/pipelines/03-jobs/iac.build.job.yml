@@ -10,13 +10,13 @@ jobs:
       
 
       
-      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:          
+      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory
       - ${{ else }}:
           - name: releaseEngineCheckoutDirectory
             value: configurationCheckoutDirectory
-      - ${{ if eq(resources.repositories.*.name, 'workload') }}:      
+      - ${{ if eq(resources.repositories.*.name, 'workload') }}:
           - name: workloadCheckoutDirectory
             value: workloadCheckoutDirectory
       - ${{ else }}:
@@ -35,10 +35,10 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if ne(resources.repositories.release-engine-core.name, '') }}:          
+      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:
           - checkout: release-engine-core
             path: releaseEngineCheckoutDirectory
-      - ${{ if ne(resources.repositories.workload.name, '') }}:      
+      - ${{ if eq(resources.repositories.*.name, 'workload') }}:
           - checkout: workload
             path: workloadCheckoutDirectory
 
