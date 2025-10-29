@@ -13,82 +13,39 @@ stages:
               - name: lastWorkloadInStage
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
 
-              - name: primaryEnvironment
-                value: ${{ env.primaryEnvironment }}
-              - name: envDependsOn
-                value: ${{ env.dependsOn }}
-              - name: stageDependsOn
-                value: ${{ stage.infrastructure.iac.dependsOn }}
-              - name: stagePreRequisiteStage
-                value: ${{ stage.infrastructure.iac.preRequisiteStage }}
+            displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'         
 
 
-            displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
-
-          #   # primary environment and does not have workload dependency
-          #   ${{ if and(eq(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
+            ## Configure stage dependencies based on environment and stage settings ##
+            dependsOn:                      
             
-          #     dependsOn: build_${{ stage.infrastructure.iac.name }}
-
-          #   # primary environment and has workload dependency
-          #   ${{ elseif and(eq(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-        
-          #     dependsOn:
-          #       - build_${{ stage.infrastructure.iac.name }}
-          #       - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
-            
-          #   # non-primary environment and does not have workload dependency
-          #   ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
-          #     dependsOn:
-          #       # check if last in stage to depend on previous environment deployment
-          #       - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
-          #           # get the stage which has lastInStage true and set dependsOn to that environment deployment
-          #           - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
-          #               - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
-          
-          #  # non-primary environment and has workload dependency            
-          #   # ${{ else }}:
-          #   ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, 'false')) }}:
-          #     dependsOn:
-          #       - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-
-          #   # non-primary environment and, workload dependency and preRequisiteStage not defined
-          #   ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, '') }}:
-          #     dependsOn:
-          #       - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
-
-            # check if environment is primary, i.e.: development
+            # check if environment runs after build, i.e.: development
             ${{ if eq(env.afterBuild, 'true') }}:
-              # if there is no dependencies on other stages, it just add the build
-              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
-                dependsOn: build_${{ stage.infrastructure.iac.name }}
-
-              # primary environment and has workload dependency
-              ${{ else }}:          
-                dependsOn:
+              # add only the build stage if there is no dependencies on other stages
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:                
+                  - build_${{ stage.infrastructure.iac.name }}
+              
+              # add both build and dependency stage if there is a dependency
+              ${{ else }}:                          
                   - build_${{ stage.infrastructure.iac.name }}
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
             
-            ${{ else }}:
-
-              # non-primary environment and does not have workload dependency
-              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
-                dependsOn:
-                  # check if last in stage to depend on previous environment deployment
+            # if environment does not run after build, it must depend on a previous environment
+            ${{ else }}:              
+              # maps the latest stages of the latest environment if there is no dependency in a previous stage of the same environment
+              # if it is a multi-stage deployment with dependencies between stages
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:                
                   - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
-                      # get the stage which has lastInStage true and set dependsOn to that environment deployment
+                      # adds dependencies to all stages that are not preRequisiteStages of the previous environment
                       - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
                           - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
-            
-              # non-primary environment and has workload dependency            
-              # ${{ else }}:
-              ${{ elseif eq(stage.infrastructure.iac.dependsOn, 'false') }}:
-                dependsOn:
+
+              # add dependency to the stage a stage in a previous environment if there is no stage dependency
+              ${{ elseif eq(stage.infrastructure.iac.dependsOn, 'false') }}:                
                   - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
 
-              # non-primary environment and, workload dependency and preRequisiteStage not defined
-              ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, '') }}:
-                dependsOn:
+              # add dependency to a stage in the same environment if preRequisiteStage is not defined
+              ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, '') }}:                
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             jobs:
