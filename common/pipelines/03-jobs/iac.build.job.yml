@@ -9,19 +9,17 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
       
 
-      - ${{ if ne(parameters.workloadSettings.repository,'') }}:
+      - ${{ if eq(parameters.workloadSettings.repository,'') }}:
+          - name: releaseEngineCheckoutDirectory
+            value: configurationCheckoutDirectory
+          - name: workloadCheckoutDirectory
+            value: configurationCheckoutDirectory
+
+      - ${{ else }}:
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory
           - name: workloadCheckoutDirectory
             value: workloadCheckoutDirectory
-
-
-      - ${{ else }}:
-            - name: releaseEngineCheckoutDirectory
-              value: configurationCheckoutDirectory
-            - name: workloadCheckoutDirectory
-              value: configurationCheckoutDirectory
-
 
     steps:
       # - checkout: self
