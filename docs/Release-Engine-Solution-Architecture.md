@@ -53,7 +53,6 @@ graph TD
 
 #### Scripts and Functions
 
-- `/common/scripts/Deploy-AzureResource.ps1` - Core Azure resource deployment script
 - `/common/scripts/functions/` - Reusable PowerShell functions
 - `/common/scripts/Replace-ConfigurationFilesTokens.ps1` - Token replacement functionality
 

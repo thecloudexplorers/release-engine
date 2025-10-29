@@ -218,12 +218,10 @@ graph TD
 | **Orchestrator** | Main pipeline coordination | Azure DevOps YAML | `/common/pipelines/01-orchestrators/` |
 | **Build Stage** | Infrastructure validation and build | Azure DevOps YAML | `/common/pipelines/02-stages/iac.build.stage.yml` |
 | **Deploy Stage** | Multi-environment deployment | Azure DevOps YAML | `/common/pipelines/02-stages/iac.deploy.stage.yml` |
-| **Deploy Script** | Azure resource deployment | PowerShell | `/common/scripts/Deploy-AzureResource.ps1` |
 | **Token Replacement** | Configuration parameterization | PowerShell | `/common/scripts/Replace-ConfigurationFilesTokens.ps1` |
 
 **Evidence**: 
 - release-engine-core/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
-- release-engine-core/common/scripts/Deploy-AzureResource.ps1#L1-L50
 
 #### 4.3.2 Pattern Layer Components
 
@@ -468,16 +466,6 @@ metadata resources = {
   description: 'Deploys a resource group and a storage account.'
 }
 ```
-
-#### 7.2.2 Deployment Automation
-
-**Evidence**: release-engine/common/scripts/Deploy-AzureResource.ps1#L1-L50
-
-The deployment script supports multiple scopes and error handling:
-
-- Tenant-level deployments
-- Subscription-level deployments  
-- Resource group-level deployments
 
 ### 7.3 Observability
 

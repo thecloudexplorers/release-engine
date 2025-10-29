@@ -166,5 +166,4 @@ workloadSettings:
         name: thecloudexplorers/ReleaseEngine
   ```
 - PowerShell Azure Resource Deployment:
-  - Uses `/common/scripts/Deploy-AzureResource.ps1`
   - Token replacement via `/common/scripts/Replace-ConfigurationFilesTokens.ps1`
