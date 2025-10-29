@@ -74,7 +74,7 @@ jobs:
                     deploymentMode: Incremental
                     deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
                     deploymentOutputs: deploymentOutputs
-                    ${{ if ne(parameters.jobSettings.stage.infrastructure.iac.deploymentScope, 'ResourceGroup') }}:
+                    ${{ if eq(parameters.jobSettings.stage.infrastructure.iac.deploymentScope, 'ResourceGroup') }}:
                       resourceGroupName: ${{ parameters.jobSettings.stage.infrastructure.iac.resourceGroupName }}
                       subscriptionId: ${{ parameters.jobSettings.stage.infrastructure.iac.subscriptionId }}
 
