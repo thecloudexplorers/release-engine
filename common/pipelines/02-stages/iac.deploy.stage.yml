@@ -14,38 +14,41 @@ stages:
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
 
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'         
-
-
-            ## Configure stage dependencies based on environment and stage settings ##
-            dependsOn:                      
             
+            ## Configure stage dependencies based on environment and stage settings ##
             # check if environment runs after build, i.e.: development
             ${{ if eq(env.afterBuild, 'true') }}:
               # add only the build stage if there is no dependencies on other stages
-              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:                
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
+                dependsOn: 
                   - build_${{ stage.infrastructure.iac.name }}
               
               # add both build and dependency stage if there is a dependency
-              ${{ else }}:                          
+              ${{ else }}:          
+                dependsOn:
                   - build_${{ stage.infrastructure.iac.name }}
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
             
             # if environment does not run after build, it must depend on a previous environment
-            ${{ else }}:              
+            ${{ else }}:
+              
               # maps the latest stages of the latest environment if there is no dependency in a previous stage of the same environment
               # if it is a multi-stage deployment with dependencies between stages
-              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:                
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
+                dependsOn:
                   - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
                       # adds dependencies to all stages that are not preRequisiteStages of the previous environment
                       - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
                           - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
 
               # add dependency to the stage a stage in a previous environment if there is no stage dependency
-              ${{ elseif eq(stage.infrastructure.iac.dependsOn, 'false') }}:                
+              ${{ elseif eq(stage.infrastructure.iac.dependsOn, 'false') }}:
+                dependsOn:
                   - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
 
               # add dependency to a stage in the same environment if preRequisiteStage is not defined
-              ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, '') }}:                
+              ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, '') }}:
+                dependsOn:
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             jobs:
