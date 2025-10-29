@@ -50,7 +50,7 @@ stages:
               dependsOn:
                 - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
 
-            ${{ elseif eq(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
+            ${{ elseif eq(stage.infrastructure.iac.preRequisiteStage, 'true') }}:
               dependsOn:
                 - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
