@@ -9,9 +9,7 @@ jobs:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
       
 
-      - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
-          
-        
+      - ${{ if ne(parameters.workloadSettings.repository,'') }}:
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory
           - name: workloadCheckoutDirectory
