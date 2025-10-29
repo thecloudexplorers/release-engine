@@ -57,23 +57,22 @@ stages:
           #     dependsOn:
           #       - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
-            # check if environment is primary 
-            ${{ if eq(env.primaryEnvironment, 'true') }}:
-              # does not have workload dependency
-              ${{ if ne(stage.infrastructure.iac.dependsOn, '') }}:
-                dependsOn:
-                  - build_${{ stage.infrastructure.iac.name }}
-                  - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
+            # check if environment is primary, i.e.: development
+            ${{ if eq(env.afterBuild, 'true') }}:
+              # if there is no dependencies on other stages, it just add the build
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
+                dependsOn: build_${{ stage.infrastructure.iac.name }}
 
               # primary environment and has workload dependency
               ${{ else }}:          
-                dependsOn: build_${{ stage.infrastructure.iac.name }}               
-                
+                dependsOn:
+                  - build_${{ stage.infrastructure.iac.name }}
+                  - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
             
             ${{ else }}:
 
               # non-primary environment and does not have workload dependency
-              ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
+              ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
                 dependsOn:
                   # check if last in stage to depend on previous environment deployment
                   - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
@@ -81,9 +80,9 @@ stages:
                       - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
                           - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
             
-            # non-primary environment and has workload dependency            
+              # non-primary environment and has workload dependency            
               # ${{ else }}:
-              ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, 'false')) }}:
+              ${{ elseif eq(stage.infrastructure.iac.dependsOn, 'false') }}:
                 dependsOn:
                   - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
 
