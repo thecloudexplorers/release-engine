@@ -36,7 +36,7 @@
 
 The Release Engine is a comprehensive three-tier CI/CD automation solution developed by The Cloud Explorers that implements the Facade Pattern to dramatically simplify Azure DevOps pipeline implementation for enterprise workloads. The solution abstracts complex deployment orchestration through three distinct repositories, enabling development teams to deploy infrastructure and applications using simple configuration files while leveraging battle-tested deployment patterns.
 
-**Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L1-L10
+**Evidence**: release-engine-core/docs/Release-Engine-Solution-Architecture.md#L1-L10
 
 ### Business Value
 
@@ -94,7 +94,7 @@ The Release Engine is a comprehensive three-tier CI/CD automation solution devel
 - Non-Azure cloud platforms
 - Legacy system migrations
 
-**Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L40-L70
+**Evidence**: release-engine-core/docs/Release-Engine-Solution-Architecture.md#L40-L70
 
 ### 2.3 Assumptions
 
@@ -176,7 +176,7 @@ graph TB
     style External fill:#4a5568,stroke:#718096,stroke-width:1px,color:#ffffff
 ```
 
-**Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L13-L37
+**Evidence**: release-engine-core/docs/Release-Engine-Solution-Architecture.md#L13-L37
 
 ### 4.2 Logical Architecture
 
@@ -195,7 +195,7 @@ graph TD
     end
     
     subgraph Core["⚙️ Core Layer"]
-        CoreRepo["📁 release-engine"]
+        CoreRepo["📁 release-engine-core"]
         Components["🎼 Pipeline orchestrators<br/>🔗 Reusable stages<br/>📜 PowerShell scripts"]
     end
     
@@ -207,7 +207,7 @@ graph TD
     style Core fill:#276749,stroke:#38a169,stroke-width:2px,color:#ffffff
 ```
 
-**Evidence**: release-engine/docs/Release-Engine-Solution-Architecture.md#L13-L37
+**Evidence**: release-engine-core/docs/Release-Engine-Solution-Architecture.md#L13-L37
 
 ### 4.3 Component Catalog
 
@@ -218,12 +218,10 @@ graph TD
 | **Orchestrator** | Main pipeline coordination | Azure DevOps YAML | `/common/pipelines/01-orchestrators/` |
 | **Build Stage** | Infrastructure validation and build | Azure DevOps YAML | `/common/pipelines/02-stages/iac.build.stage.yml` |
 | **Deploy Stage** | Multi-environment deployment | Azure DevOps YAML | `/common/pipelines/02-stages/iac.deploy.stage.yml` |
-| **Deploy Script** | Azure resource deployment | PowerShell | `/common/scripts/Deploy-AzureResource.ps1` |
 | **Token Replacement** | Configuration parameterization | PowerShell | `/common/scripts/Replace-ConfigurationFilesTokens.ps1` |
 
 **Evidence**: 
-- release-engine/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
-- release-engine/common/scripts/Deploy-AzureResource.ps1#L1-L50
+- release-engine-core/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
 
 #### 4.3.2 Pattern Layer Components
 
@@ -314,12 +312,12 @@ The solution requires service principals for Azure deployments, configured per e
 **Evidence**: release-engine-config-template/azure-pipelines.yml#L1-L35
 
 ```yaml
-resources:
-  repositories:
-    - repository: release-engine
-      type: github
-      name: thecloudexplorers/release-engine
-      endpoint: thecloudexplorers
+        resources:
+    repositories:
+        - repository: release-engine-core
+            type: github
+            name: thecloudexplorers/release-engine-core
+            endpoint: thecloudexplorers
 ```
 
 {Placeholder: Service principal configuration and RBAC assignments need documentation}
@@ -400,9 +398,9 @@ Repository references enable template inheritance:
 ```yaml
 resources:
   repositories:
-    - repository: release-engine
-      type: github
-      name: thecloudexplorers/release-engine
+        - repository: release-engine-core
+            type: github
+            name: thecloudexplorers/release-engine-core
       endpoint: thecloudexplorers
       ref: refs/tags/v1.3.0
 ```
@@ -468,16 +466,6 @@ metadata resources = {
   description: 'Deploys a resource group and a storage account.'
 }
 ```
-
-#### 7.2.2 Deployment Automation
-
-**Evidence**: release-engine/common/scripts/Deploy-AzureResource.ps1#L1-L50
-
-The deployment script supports multiple scopes and error handling:
-
-- Tenant-level deployments
-- Subscription-level deployments  
-- Resource group-level deployments
 
 ### 7.3 Observability
 

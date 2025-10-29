@@ -21,7 +21,7 @@ graph TD
     end
     
     subgraph Core["⚙️ Core Layer"]
-        CoreRepo["📁 release-engine"]
+        CoreRepo["📁 release-engine-core"]
         CoreFeatures["• Reusable pipeline components<br/>• PowerShell deployment scripts<br/>• Orchestrators, stages, jobs, and steps"]
     end
     
@@ -38,7 +38,7 @@ graph TD
 
 ## Repository Structure and Responsibilities
 
-### 1. Core Layer: release-engine
+### 1. Core Layer: release-engine-core
 
 **Purpose**: Foundation layer providing reusable CI/CD components and deployment scripts.
 
@@ -53,7 +53,6 @@ graph TD
 
 #### Scripts and Functions
 
-- `/common/scripts/Deploy-AzureResource.ps1` - Core Azure resource deployment script
 - `/common/scripts/functions/` - Reusable PowerShell functions
 - `/common/scripts/Replace-ConfigurationFilesTokens.ps1` - Token replacement functionality
 
@@ -324,9 +323,9 @@ environments:
 # Pipeline resource references
 resources:
   repositories:
-    - repository: release-engine
+    - repository: release-engine-core
       type: github
-      name: thecloudexplorers/release-engine
+      name: thecloudexplorers/release-engine-core
     - repository: workload
       type: github
       name: thecloudexplorers/release-engine-pattern-template
@@ -514,7 +513,7 @@ Consider contributing when you:
 ### Repository Links and Examples
 
 #### Core Repository
-- **[release-engine](https://github.com/thecloudexplorers/release-engine)** - Core pipeline components and orchestrators
+- **[release-engine-core](https://github.com/thecloudexplorers/release-engine-core)** - Core pipeline components and orchestrators
 
 #### Template Repositories
 - **[release-engine-pattern-template](https://github.com/thecloudexplorers/release-engine-pattern-template)** - Workload pattern template
