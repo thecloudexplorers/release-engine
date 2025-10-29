@@ -8,25 +8,37 @@ jobs:
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
 
+      - ${{ if ne(resources.repositories.release-engine-core.name, '') }}:          
+          - name: releaseEngineCheckoutDirectory
+            value: releaseEngineCheckoutDirectory
+      - ${{ else }}:
+          - name: releaseEngineCheckoutDirectory
+            value: configurationCheckoutDirectory
+      - ${{ if ne(resources.repositories.workload.name, '') }}:      
+          - name: workloadCheckoutDirectory
+            value: workloadCheckoutDirectory
+      - ${{ else }}:
+          - name: workloadCheckoutDirectory
+            value: configurationCheckoutDirectory
+
+
     steps:
+      # - checkout: self
+      #   path: configurationCheckoutDirectory
+      # - checkout: release-engine-core
+      #   path: releaseEngineCheckoutDirectory
+      # - checkout: workload
+      #   path: workloadCheckoutDirectory
+
       - checkout: self
         path: configurationCheckoutDirectory
-      - checkout: release-engine-core
-        path: releaseEngineCheckoutDirectory
-      - checkout: workload
-        path: workloadCheckoutDirectory
-
-      - task: CopyFiles@2
-        displayName: Copying Workload content
-        inputs:
-          SourceFolder: $(Pipeline.Workspace)/workloadCheckoutDirectory/${{ parameters.workloadSettings.workloadArtifactsPath }}
-          Contents: |
-            **
-            !tests/**
-            !examples/**
-            !workload.yml
-          TargetFolder: $(build.artifactstagingdirectory)/$(workload)
-          flattenFolders: false
+      
+      - ${{ if ne(resources.repositories.release-engine-core.name, '') }}:          
+          - checkout: release-engine-core
+            path: releaseEngineCheckoutDirectory
+      - ${{ if ne(resources.repositories.workload.name, '') }}:      
+          - checkout: workload
+            path: workloadCheckoutDirectory
 
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
@@ -39,9 +51,21 @@ jobs:
           flattenFolders: false
 
       - task: CopyFiles@2
+        displayName: Copying Workload content
+        inputs:
+          SourceFolder: $(Pipeline.Workspace)/$(workloadCheckoutDirectory)/${{ parameters.workloadSettings.workloadArtifactsPath }}
+          Contents: |
+            **
+            !tests/**
+            !examples/**
+            !workload.yml
+          TargetFolder: $(build.artifactstagingdirectory)/$(workload)
+          flattenFolders: false
+
+      - task: CopyFiles@2
         displayName: Copying common content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/releaseEngineCheckoutDirectory/common
+          SourceFolder: $(Pipeline.Workspace)/$(releaseEngineCheckoutDirectory)/common
           Contents: |
             **
             !tests/**
