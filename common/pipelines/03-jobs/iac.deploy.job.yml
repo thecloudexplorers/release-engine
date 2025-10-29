@@ -74,6 +74,8 @@ jobs:
                     deploymentMode: Incremental
                     deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
                     deploymentOutputs: deploymentOutputs
+                    ${{ if ne(parameters.jobSettings.stage.infrastructure.iac.deploymentScope, 'ResourceGroup') }}:
+                      resourceGroupName: ${{ parameters.jobSettings.stage.infrastructure.iac.resourceGroupName }}
 
             # Runs post deployment powershell scripts
             - ${{ if ne(parameters.jobSettings.stage.infrastructure.postDeploymentScripts, '') }}:
