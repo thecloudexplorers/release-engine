@@ -14,7 +14,6 @@ stages:
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
 
-
             # primary environment and does not have workload dependency
             ${{ if and(eq(env.primaryEnvironment, True), eq(stage.infrastructure.iac.dependsOn, '')) }}:
             
@@ -34,32 +33,12 @@ stages:
                 - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
                     # get the stage which has lastInStage true and set dependsOn to that environment deployment
                     - ${{ if eq(dependencyStage.infrastructure.iac.lastInStage, True) }}:                  
-                        # - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
                         - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
           
-           # non-primary environment and has workload dependency
-            # ${{ if and(eq(env.primaryEnvironment, False), eq(coalesce(stage.infrastructure.iac.dependsOn, False), False)) }}:
+           # non-primary environment and has workload dependency            
             ${{ else }}:
               dependsOn:
-                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-
-         
-            
-            
-
-            
-            # # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-            # ${{ else }}:
-            #   dependsOn:
-            #     - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
-
-            # non-primary environment and has workload dependency
-                        # non-primary environment and has workload dependency
-            #             # non-primary environment and has workload dependency
-            # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-            #   dependsOn:
-            #     - ${{ env.name }}_${{ env.infrastructure.iac.dependsOn }}              
-
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}          
 
             jobs:
               - template: /common/pipelines/03-jobs/iac.deploy.job.yml
