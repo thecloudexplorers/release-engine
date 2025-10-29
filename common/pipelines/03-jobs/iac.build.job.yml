@@ -7,14 +7,16 @@ jobs:
     displayName: Building IaC Artifacts
     variables:
       - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+      
 
-      - ${{ if ne(resources.repositories.release-engine-core.name, '') }}:          
+      
+      - ${{ if eq(resources.repositories.*.name, 'release-engine-core') }}:          
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory
       - ${{ else }}:
           - name: releaseEngineCheckoutDirectory
             value: configurationCheckoutDirectory
-      - ${{ if ne(resources.repositories.workload.name, '') }}:      
+      - ${{ if eq(resources.repositories.*.name, 'workload') }}:      
           - name: workloadCheckoutDirectory
             value: workloadCheckoutDirectory
       - ${{ else }}:
