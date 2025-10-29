@@ -1,19 +1,5 @@
 name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
 
-resources:
-  repositories:
-    - repository: release-engine-core # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-      type: github
-      name: thecloudexplorers/release-engine-core # RELEASE ENGINE REPOSITORY ###  MUST NOT  ### BE CHANGED
-      endpoint: thecloudexplorers
-      ref: refs/tags/v1.6.0
-
-    - repository: workload # REPOSITORY ALIAS ###  MUST NOT  ### BE CHANGED
-      type: github
-      name: thecloudexplorers/release-engine-pattern-template
-      endpoint: thecloudexplorers
-      ref: refs/tags/v1.3.0
-
 trigger:
   - main
   - users/*
@@ -21,10 +7,10 @@ trigger:
 pool: MSHosted-WorkloadsPool
 
 extends:
-  template: /patterns/resource_group_scope_pattern/workload.yml@workload
+  template: /patterns/iac/resource_group_scope_pattern/workload.yml
   parameters:
     platformWorkloadSettings:
-      configurationFilePath: /_config
+      configurationFilePath: /patterns/iac/resource_group_scope_pattern/tests/_config
 
       environments:
         - name: development
