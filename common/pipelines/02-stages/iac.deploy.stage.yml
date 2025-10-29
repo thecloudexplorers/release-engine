@@ -46,7 +46,7 @@ stages:
             
             ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
               dependsOn:
-                - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
+                - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
             
             # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
             ${{ else }}:
