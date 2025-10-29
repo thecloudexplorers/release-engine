@@ -36,11 +36,11 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:          
-          - checkout: release-engine-core
-            path: releaseEngineCheckoutDirectory          
-          - checkout: workload
-            path: workloadCheckoutDirectory
+      # - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:          
+      #     - checkout: release-engine-core
+      #       path: releaseEngineCheckoutDirectory          
+      #     - checkout: workload
+      #       path: workloadCheckoutDirectory
 
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
