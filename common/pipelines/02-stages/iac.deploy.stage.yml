@@ -41,7 +41,7 @@ stages:
                 # check if last in stage to depend on previous environment deployment
                 - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
                     # get the stage which has lastInStage true and set dependsOn to that environment deployment
-                    - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:                  
+                    - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
                         - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
           
            # non-primary environment and has workload dependency            
@@ -49,6 +49,10 @@ stages:
             ${{ elseif and(ne(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, 'false')) }}:
               dependsOn:
                 - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+
+            ${{ elseif eq(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
+              dependsOn:
+                - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             jobs:
               - template: /common/pipelines/03-jobs/iac.deploy.job.yml
