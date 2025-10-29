@@ -14,15 +14,17 @@ stages:
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
 
+            # non-primary environment and has workload dependency
+            # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
+            dependsOn:
+              - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+
             # primary environment and does not have workload dependency
             ${{ if and(eq(env.primaryEnvironment, 'true'), eq(stage.infrastructure.iac.dependsOn, '')) }}:
             
               dependsOn: build_${{ stage.infrastructure.iac.name }}
 
-            # non-primary environment and has workload dependency
-            # ${{ elseif and(ne(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
-            dependsOn:
-              - ${{ env.dependsOn }}_${{ stage.infrastructure.iac.name }}
+
 
             # primary environment and has workload dependency
             ${{ elseif and(eq(env.primaryEnvironment, 'true'), ne(stage.infrastructure.iac.dependsOn, '')) }}:
