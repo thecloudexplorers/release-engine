@@ -12,6 +12,15 @@ stages:
               
               - name: lastWorkloadInStage
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
+
+              - name: primaryEnvironment
+                value: ${{ env.primaryEnvironment }}
+              - name: envDependsOn
+                value: ${{ env.dependsOn }}
+              - name: stageDependsOn
+                value: ${{ stage.infrastructure.iac.dependsOn }}
+
+
             displayName: '${{ env.displayName }} - ${{ stage.infrastructure.iac.displayName }}'
 
             # primary environment and does not have workload dependency
