@@ -6,7 +6,7 @@ jobs:
   - job: ${{ variables.workload }}_build
     displayName: Building IaC Artifacts
     variables:
-      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
 
     steps:
       - checkout: self
