@@ -10,8 +10,6 @@ jobs:
       - name: configurationCheckoutDirectory
         value: configurationCheckoutDirectory
 
-      # - name: workloadCheckoutDirectory
-      #   value: workloadCheckoutDirectory
 
       - ${{ if and(eq(parameters.workloadSettings.workloadContext,'internal'), eq(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
           - name: workloadCheckoutDirectory
@@ -24,15 +22,7 @@ jobs:
             value: configurationCheckoutDirectory
       - ${{ else }}:
           - name: workloadCheckoutDirectory
-            value: workloadCheckoutDirectory  
-
-          # - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:    
-          #     - name: workloadCheckoutDirectory
-          #       value: releaseEngineCheckoutDirectory
-          # - ${{ else }}:
-          #     - name: workloadCheckoutDirectory
-          #       value: configurationCheckoutDirectory      
-
+            value: workloadCheckoutDirectory    
 
 
       - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
@@ -48,17 +38,10 @@ jobs:
           
       
     steps:
-      # - checkout: self
-      #   path: configurationCheckoutDirectory
-      # - checkout: release-engine-core
-      #   path: releaseEngineCheckoutDirectory
-      # - checkout: workload
-      #   path: workloadCheckoutDirectory
 
       - checkout: self
         path: configurationCheckoutDirectory
       
-      # - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
       - ${{ if ne(parameters.workloadSettings.workloadContext,'internal') }}:
           - checkout: workload
             path: workloadCheckoutDirectory

@@ -69,7 +69,7 @@ This document provides step-by-step instructions for creating new patterns based
        value: <default-service-connection>
 
    stages:
-     - template: /pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml@release-engine-core
+     - template: /pipelines/01-orchestrators/pattern.orchestrator.yml.yml@release-engine-core
        parameters:
          workloadSettings:
            name: <new_pattern_name>

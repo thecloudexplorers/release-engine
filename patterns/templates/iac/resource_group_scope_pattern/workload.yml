@@ -10,13 +10,13 @@ variables:
     value: IacServiceConnection 
 
 stages:
-  - template: /pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml
+  - template: /pipelines/01-orchestrators/pattern.orchestrator.yml.yml
     parameters:
       workloadSettings:
         name: resource_group_scope_pattern
         configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
         environments: ${{ parameters.platformWorkloadSettings.environments }}
-        workloadArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern
+        workloadArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern                                
         # Indicates if this is an builtin pattern in the release-engine-core repo
         # Options: "internal" | "external" | "" (empty string)
         workloadContext: internal

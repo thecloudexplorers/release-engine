@@ -58,7 +58,7 @@ graph TD
 
 #### Key Files
 
-- **alz.devops.workload.orchestrator.yml**: Main orchestrator that coordinates build and deploy stages
+- **pattern.orchestrator.yml.yml**: Main orchestrator that coordinates build and deploy stages
 - **iac.build.stage.yml**: Infrastructure build stage template
 - **iac.deploy.stage.yml**: Infrastructure deployment stage template with environment dependency logic
 
