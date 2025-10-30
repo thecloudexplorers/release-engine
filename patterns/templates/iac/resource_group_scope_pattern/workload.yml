@@ -1,5 +1,5 @@
 parameters:
-  - name: platformWorkloadSettings
+  - name: deploymentSettings
     type: object
 
 variables:
@@ -14,13 +14,13 @@ stages:
     parameters:
       workloadSettings:
         name: resource_group_scope_pattern
-        configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
-        environments: ${{ parameters.platformWorkloadSettings.environments }}
+        configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
+        environments: ${{ parameters.deploymentSettings.environments }}
         workloadArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern                                
         # Indicates if this is an builtin pattern in the release-engine-core repo
         # Options: "internal" | "external" | "" (empty string)
         workloadContext: internal
-        configurationPipelineContext: ${{ parameters.platformWorkloadSettings.configurationPipelineContext }}
+        configurationPipelineContext: ${{ parameters.deploymentSettings.configurationPipelineContext }}
         
         stages:
           - infrastructure:

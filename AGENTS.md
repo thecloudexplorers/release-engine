@@ -61,7 +61,7 @@ This document provides step-by-step instructions for creating new patterns based
 
    ```yaml
    parameters:
-     - name: platformWorkloadSettings
+     - name: deploymentSettings
        type: object
 
    variables:
@@ -73,9 +73,9 @@ This document provides step-by-step instructions for creating new patterns based
        parameters:
          workloadSettings:
            name: <new_pattern_name>
-           configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
+           configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
            workloadDefinitionRepositoryName: release-engine-pattern-template
-           environments: ${{ parameters.platformWorkloadSettings.environments }}
+           environments: ${{ parameters.deploymentSettings.environments }}
            workloadArtifactsPath: /patterns/<new_pattern_name>
            stages:
              - infrastructure:
@@ -84,7 +84,7 @@ This document provides step-by-step instructions for creating new patterns based
                    deploymentScope: Subscription
                    serviceConnection: $(serviceConnection)
                    iacMainFileName: workload.bicep
-                   iacParameterFileName: ${{ parameters.platformWorkloadSettings.iacParameterFileName }}
+                   iacParameterFileName: ${{ parameters.deploymentSettings.iacParameterFileName }}
                    iacParameterFilesDirectory: /iac/
    ```
 

@@ -60,7 +60,7 @@ stages:
         deploymentScope: ResourceGroup
         serviceConnection: $(serviceConnection)
         iacMainFileName: resource_group_scope_pattern.bicep
-        iacParameterFileName: ${{ parameters.platformWorkloadSettings.iacParameterFileName }}
+        iacParameterFileName: ${{ parameters.deploymentSettings.iacParameterFileName }}
 ```
 
 ### Environment Variables Required

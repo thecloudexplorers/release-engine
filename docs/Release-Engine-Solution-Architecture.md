@@ -338,7 +338,7 @@ resources:
 extends:
   template: /patterns/multi_stage_pattern/workload.yml@workload
   parameters:
-    platformWorkloadSettings:
+    deploymentSettings:
       configurationFilePath: /_config
       environments: [development, test, production]
 ```
