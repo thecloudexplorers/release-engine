@@ -37,7 +37,7 @@ jobs:
       #   path: workloadCheckoutDirectory
 
       - checkout: self
-        path: $(configurationCheckoutDirectory)
+        path: configurationCheckoutDirectory
       
       # - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
       - ${{ if ne(parameters.workloadSettings.workloadContext,'internal') }}:
@@ -50,7 +50,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/$(configurationCheckoutDirectory)/${{ parameters.workloadSettings.configurationFilePath }}
+          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.workloadSettings.configurationFilePath }}
           Contents: |
             **
             !pipelines/**
