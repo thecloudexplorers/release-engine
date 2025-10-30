@@ -14,19 +14,30 @@ jobs:
           - name: workloadCheckoutDirectory
             value: configurationCheckoutDirectory
 
+      # - ${{ else }}:
+      #     - name: workloadCheckoutDirectory
+      #       value: workloadCheckoutDirectory
+
+      - ${{ elseif eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:      
+          - name: workloadCheckoutDirectory
+            value: releaseEngineCheckoutDirectory
+      
       - ${{ else }}:
           - name: workloadCheckoutDirectory
             value: workloadCheckoutDirectory
 
+
       - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
           - name: releaseEngineCheckoutDirectory
             value: configurationCheckoutDirectory
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+          
 
       - ${{ else }}:
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory            
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+          
       
     steps:
       # - checkout: self
