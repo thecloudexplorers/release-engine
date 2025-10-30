@@ -19,7 +19,7 @@ stages:
         patternArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern                                
         # Indicates if this is an builtin pattern in the release-engine-core repo
         # Options: "internal" | "external" | "" (empty string)
-        workloadContext: internal
+        patternContext: internal
         configurationPipelineContext: ${{ parameters.deploymentSettings.configurationPipelineContext }}
         
         stages:

@@ -11,13 +11,13 @@ jobs:
         value: configurationCheckoutDirectory
 
 
-      - ${{ if and(eq(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ if and(eq(parameters.patternSettings.patternContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: patternCheckoutDirectory
             value: configurationCheckoutDirectory
-      - ${{ elseif and(eq(parameters.patternSettings.workloadContext,'internal'), ne(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ elseif and(eq(parameters.patternSettings.patternContext,'internal'), ne(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: patternCheckoutDirectory
             value: releaseEngineCheckoutDirectory
-      - ${{ elseif and(ne(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ elseif and(ne(parameters.patternSettings.patternContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: patternCheckoutDirectory
             value: configurationCheckoutDirectory
       - ${{ else }}:
@@ -42,7 +42,7 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if ne(parameters.patternSettings.workloadContext,'internal') }}:
+      - ${{ if ne(parameters.patternSettings.patternContext,'internal') }}:
           - checkout: workload
             path: patternCheckoutDirectory
       - ${{ if ne(parameters.patternSettings.configurationPipelineContext,'internal') }}:
