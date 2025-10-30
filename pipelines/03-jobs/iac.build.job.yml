@@ -10,12 +10,12 @@ jobs:
       - name: configurationCheckoutDirectory
         value: configurationCheckoutDirectory
 
-      - name: workloadCheckoutDirectory
-        value: workloadCheckoutDirectory
+      # - name: workloadCheckoutDirectory
+      #   value: workloadCheckoutDirectory
 
       - ${{ if eq(parameters.workloadSettings.workloadContext,'internal') }}:
           - name: workloadCheckoutDirectory
-            value: configurationCheckoutDirectory
+            value: releaseEngineCheckoutDirectory
 
       # - ${{ else }}:
       #     - name: workloadCheckoutDirectory
@@ -23,7 +23,7 @@ jobs:
 
       - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:      
           - name: workloadCheckoutDirectory
-            value: releaseEngineCheckoutDirectory
+            value: workloadCheckoutDirectory
       
 
 
