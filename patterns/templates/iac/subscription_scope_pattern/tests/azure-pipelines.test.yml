@@ -6,7 +6,7 @@ trigger:
       - users/*
   paths:
     include:
-      - patterns/templates/iac/multi_stage_pattern/**
+      - patterns/templates/iac/subscription_scope_pattern/**
 
 pool: MSHosted-WorkloadsPool
 
@@ -23,7 +23,7 @@ extends:
         - name: development
           dependsOn: build
           displayName: Dev
-          afterBuild: true          
+          afterBuild: true
         - name: test
           dependsOn: development
           displayName: Test

@@ -6,7 +6,7 @@ trigger:
       - users/*
   paths:
     include:
-      - patterns/templates/iac/multi_stage_pattern/**
+      - patterns/templates/iac/resource_group_scope_pattern/**
 
 pool: MSHosted-WorkloadsPool
 
