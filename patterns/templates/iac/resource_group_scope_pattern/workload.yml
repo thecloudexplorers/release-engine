@@ -10,7 +10,7 @@ variables:
     value: IacServiceConnection 
 
 stages:
-  - template: /pipelines/01-orchestrators/pattern.orchestrator.yml.yml
+  - template: /pipelines/01-orchestrators/pattern.orchestrator.yml
     parameters:
       workloadSettings:
         name: resource_group_scope_pattern

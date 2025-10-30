@@ -221,7 +221,7 @@ graph TD
 | **Token Replacement** | Configuration parameterization | PowerShell | `/common/scripts/Replace-ConfigurationFilesTokens.ps1` |
 
 **Evidence**: 
-- release-engine-core/pipelines/01-orchestrators/pattern.orchestrator.yml.yml#L1-L20
+- release-engine-core/pipelines/01-orchestrators/pattern.orchestrator.yml#L1-L20
 
 #### 4.3.2 Pattern Layer Components
 
@@ -446,7 +446,7 @@ graph LR
 
 #### 7.1.2 Quality Gates
 
-**Evidence**: release-engine/pipelines/01-orchestrators/pattern.orchestrator.yml.yml#L1-L20
+**Evidence**: release-engine/pipelines/01-orchestrators/pattern.orchestrator.yml#L1-L20
 
 The orchestrator coordinates build and deployment stages with dependency management.
 
@@ -471,7 +471,7 @@ metadata resources = {
 
 #### 7.3.1 Pipeline Monitoring
 
-**Evidence**: release-engine/pipelines/01-orchestrators/pattern.orchestrator.yml.yml#L12-L23
+**Evidence**: release-engine/pipelines/01-orchestrators/pattern.orchestrator.yml#L12-L23
 
 Debug capabilities are built into the orchestrator for troubleshooting.
 
