@@ -1,0 +1,28 @@
+name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - main
+  - users/*
+
+pool: MSHosted-WorkloadsPool
+
+extends:
+  template: /patterns/templates/iac/subscription_scope_pattern/deployment-pattern.yml
+  parameters:
+    deploymentSettings:
+      configurationFilePath: /patterns/templates/iac/subscription_scope_pattern/tests/_config
+      # Indicates if this is an integrated pipeline running inside release-engine-core repo
+      # Options: "internal" | "external" | "" (empty string)
+      configurationPipelineContext: "internal"   
+
+      environments:
+        - name: development
+          dependsOn: build
+          displayName: Dev
+          afterBuild: true          
+        - name: test
+          dependsOn: development
+          displayName: Test
+        - name: production
+          dependsOn: test
+          displayName: Prod

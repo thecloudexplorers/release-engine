@@ -1,0 +1,18 @@
+variables:
+  
+  landingZoneName: "patterns" # Name of the Landing Zone
+
+  # Abbreviation of the landing zone
+  # Allowed value: [a-z][0-9]{3}
+  landingZoneAbbreviation: "ptn" # Abbreviation of the Landing Zone Name
+
+  # Name of the Application deployed in the Landing Zone
+  applicationName: "subscription-scope-pattern-test"
+  applicationAbbreviation: "sspt" # Abbreviation of the Application Name
+  
+  deploymentPattern: subscription_scope_pattern_test
+  deploymentLocation: westeurope
+
+  # Must be replaced by the dedicated SPN of the lowest environment.
+  # It is used for validate the pipeline run, and will be overridden by the correct SPN of each environment on runtime
+  serviceConnection: IacServiceConnection 
