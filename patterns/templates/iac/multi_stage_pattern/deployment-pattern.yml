@@ -1,0 +1,94 @@
+parameters:
+  - name: deploymentSettings
+    type: object
+
+variables:
+  # SPN of the lowest environment.
+  # It is used for validate the pipeline run, and will be overridden by the correct SPN of each environment on runtime
+  # Can be set on configuration level parameters or as environment variable in the pipeline execution context
+  - name: serviceConnection
+    value: IacServiceConnection 
+
+stages:
+
+  - template: /pipelines/01-orchestrators/pattern.orchestrator.yml
+    parameters:
+      patternSettings:
+        name: multi_stage_pattern
+        configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
+        environments: ${{ parameters.deploymentSettings.environments }}
+        patternArtifactsPath: /patterns/templates/iac/multi_stage_pattern
+        # Indicates if this is an builtin pattern in the release-engine-core repo
+        # Options: "internal" | "external" | "" (empty string)
+        patternContext: internal
+        configurationPipelineContext: ${{ parameters.deploymentSettings.configurationPipelineContext }}
+        stages:
+
+          # Prerequisite Stage - Runs First
+          - infrastructure:
+              iac:
+                name: prerequisite_stage
+                displayName: Prerequisite Stage Example
+                deploymentScope: Subscription
+                serviceConnection: $(serviceConnection)
+                iacMainFileName: multi_stage_pattern.prerequisite.bicep
+                iacParameterFileName: /parameters/multi_stage_pattern.prerequisite.parameters.json
+                subscriptionId: $(subscriptionId)
+                preRequisiteStage: true
+
+          # Dependent Stage 1 - Depends on Prerequisite
+          - infrastructure:
+              iac:
+                name: dependent_stage1
+                displayName: Dependent Stg 1 Example
+                deploymentScope: Subscription
+                serviceConnection: $(serviceConnection)
+                iacMainFileName: multi_stage_pattern.dependent.bicep
+                iacParameterFileName: /parameters/multi_stage_pattern.dependent1.parameters.json
+                subscriptionId: $(subscriptionId)
+                dependsOn: prerequisite_stage
+                # lastInStage: true 
+
+          # Dependent Stage 2 - Depends on Prerequisite (Parallel with Stage 1 & 3)
+          - infrastructure:
+              iac:
+                name: dependent_stage2
+                displayName: Dependent Stg 2 Example
+                deploymentScope: Subscription
+                serviceConnection: $(serviceConnection)
+                iacMainFileName: multi_stage_pattern.dependent.bicep
+                iacParameterFileName: /parameters/multi_stage_pattern.dependent2.parameters.json
+                subscriptionId: $(subscriptionId)
+                dependsOn: prerequisite_stage
+                # lastInStage: true
+
+          # Dependent Stage 3 - Depends on Prerequisite (Parallel with Stage 1 & 2)
+          - infrastructure:
+              iac:
+                name: dependent_stage3
+                displayName: Dependent Stg 3 Example
+                deploymentScope: Subscription
+                serviceConnection: $(serviceConnection)
+                iacMainFileName: multi_stage_pattern.dependent.bicep
+                iacParameterFileName: /parameters/multi_stage_pattern.dependent3.parameters.json
+                subscriptionId: $(subscriptionId)
+                dependsOn: dependent_stage1
+                # lastInStage: true
+
+ # This debug stage is optional and can be used to output parameters and variables for troubleshooting purposes
+ # The debug stage can be omitted by commenting it out
+  - stage: debug_stage_pattern
+    displayName: Debug - Pattern Settings
+    condition: eq( variables['System.Debug'], 'true' )
+    dependsOn: []
+    jobs:
+      - job: debug_job
+        displayName: Debug Job
+        steps:
+        - powershell: |
+            # Shows all configurations for debugging purposes of patternSettings
+            Write-Host "\nParameters:"
+            Write-Host '${{ convertToJson(parameters) }}'
+            Write-Host "\nVariables:"
+            Get-ChildItem env:
+          displayName: Debug - Display Settings and Environment Variables
