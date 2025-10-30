@@ -1,0 +1,6 @@
+variables:
+  environmentAbbreviation: dev
+  deploymentLocation: westeurope
+  
+  # Required for subscription scoped deployments
+  # subscriptionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx

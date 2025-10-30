@@ -6,15 +6,15 @@ trigger:
       - users/*
   paths:
     include:
-      - patterns/templates/iac/resource_group_scope_pattern/**
+      - patterns/templates/iac/multi_stage_pattern/**
 
 pool: MSHosted-WorkloadsPool
 
 extends:
-  template: /patterns/templates/iac/resource_group_scope_pattern/deployment-pattern.yml
+  template: /patterns/templates/iac/multi_stage_pattern/deployment-pattern.yml
   parameters:
     deploymentSettings:
-      configurationFilePath: /patterns/templates/iac/resource_group_scope_pattern/tests/_config
+      configurationFilePath: /patterns/templates/iac/multi_stage_pattern/tests/_config
       # Indicates if this is an integrated pipeline running inside release-engine-core repo
       # Options: "internal" | "external" | "" (empty string)
       configurationPipelineContext: "internal"   
