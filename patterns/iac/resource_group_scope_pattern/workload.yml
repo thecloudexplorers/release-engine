@@ -16,8 +16,13 @@ stages:
         name: resource_group_scope_pattern
         configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
         environments: ${{ parameters.platformWorkloadSettings.environments }}
+        # Define that this workload is using a built-in pattern
+        # Built-in patterns have their IaC artifacts located in the /patterns/iac folder
+        isBuiltInPattern: true
         workloadArtifactsPath: /patterns/iac/resource_group_scope_pattern
-        # repository: release-engine-core
+        
+        
+        
         stages:
           - infrastructure:
               iac:
