@@ -27,6 +27,9 @@ jobs:
                 Write-Host '${{ convertToJson(parameters) }}'
                 Write-Host "\nVariables:"
                 Get-ChildItem env:
+                
+                Write-Host "`nWorkspace Files:"
+                Get-ChildItem -Recurse $(Pipeline.Workspace)
               displayName: Debug - Display Settings and Environment Variables
               condition: eq( variables['System.Debug'], 'true' )
            
