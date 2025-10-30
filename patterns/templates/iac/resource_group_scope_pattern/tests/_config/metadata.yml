@@ -11,7 +11,7 @@ variables:
   applicationAbbreviation: "rgst" # Abbreviation of the Application Name
   
   workload: resource_group_scope_pattern_test
-  workload_location: westeurope
+  deployment_location: westeurope
 
   # Must be replaced by the Workload dedicated SPN of the lowest environment.
   # It is used for validate the pipeline run, and will be overridden by the correct SPN of each environment on runtime
