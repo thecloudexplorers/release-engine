@@ -31,7 +31,7 @@ stages:
                 deploymentScope: ResourceGroup
                 serviceConnection: $(serviceConnection)
                 iacMainFileName: resource_group_scope_pattern.bicep
-                iacParameterFileName: /parameters/iac/resource_group_scope_pattern.parameters.json
+                iacParameterFileName: /parameters/resource_group_scope_pattern.parameters.json
                 resourceGroupName: $(resourceGroupName)
                 subscriptionId: $(subscriptionId)
 
