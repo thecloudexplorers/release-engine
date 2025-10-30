@@ -78,7 +78,7 @@ jobs:
             **
             !tests/**
             !examples/**
-            !workload.yml
+            !deployment-pattern.yml
           TargetFolder: $(build.artifactstagingdirectory)/$(deploymentPattern)
           flattenFolders: false
 
