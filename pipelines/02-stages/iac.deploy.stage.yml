@@ -1,14 +1,14 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
 
 stages:
 
-  - ${{ each env in parameters.workloadSettings.environments }}:
-      - ${{ each stage in parameters.workloadSettings.stages }}:
+  - ${{ each env in parameters.patternSettings.environments }}:
+      - ${{ each stage in parameters.patternSettings.stages }}:
           - stage: ${{ env.name }}_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}
             variables:
-              - template: /${{ parameters.workloadSettings.configurationFilePath }}/environments/vars-${{ env.name }}.yml@self
+              - template: /${{ parameters.patternSettings.configurationFilePath }}/environments/vars-${{ env.name }}.yml@self
               
               - name: lastWorkloadInStage
                 value: ${{ stage.infrastructure.iac.lastWorkloadInStage }}
@@ -36,7 +36,7 @@ stages:
               # if it is a multi-stage deployment with dependencies between stages
               ${{ if eq(stage.infrastructure.iac.dependsOn, '') }}:
                 dependsOn:
-                  - ${{ each dependencyStage in parameters.workloadSettings.stages }}:
+                  - ${{ each dependencyStage in parameters.patternSettings.stages }}:
                       # adds dependencies to all stages that are not preRequisiteStages of the previous environment
                       - ${{ if ne(dependencyStage.infrastructure.iac.preRequisiteStage, 'true') }}:
                           - ${{ env.dependsOn }}_${{ dependencyStage.infrastructure.iac.name }}
@@ -52,9 +52,9 @@ stages:
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             jobs:
-              - template: /common/pipelines/03-jobs/iac.deploy.job.yml
+              - template: /pipelines/03-jobs/iac.deploy.job.yml
                 parameters:
-                  workloadSettings: ${{ parameters.workloadSettings }}                  
+                  patternSettings: ${{ parameters.patternSettings }}                  
                   jobSettings:
                     environment: ${{ env.name }}
                     stage: ${{ stage }}

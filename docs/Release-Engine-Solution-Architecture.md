@@ -46,10 +46,10 @@ graph TD
 
 #### Pipeline Structure
 
-- `/common/pipelines/01-orchestrators/` - High-level pipeline orchestration templates
-- `/common/pipelines/02-stages/` - Reusable deployment stages (build, deploy)
-- `/common/pipelines/03-jobs/` - Individual job definitions
-- `/common/pipelines/04-steps/` - Atomic pipeline steps
+- `/pipelines/01-orchestrators/` - High-level pipeline orchestration templates
+- `/pipelines/02-stages/` - Reusable deployment stages (build, deploy)
+- `/pipelines/03-jobs/` - Individual job definitions
+- `/pipelines/04-steps/` - Atomic pipeline steps
 
 #### Scripts and Functions
 
@@ -58,7 +58,7 @@ graph TD
 
 #### Key Files
 
-- **alz.devops.workload.orchestrator.yml**: Main orchestrator that coordinates build and deploy stages
+- **pattern.orchestrator.yml**: Main orchestrator that coordinates build and deploy stages
 - **iac.build.stage.yml**: Infrastructure build stage template
 - **iac.deploy.stage.yml**: Infrastructure deployment stage template with environment dependency logic
 
@@ -97,7 +97,7 @@ graph LR
 **Pattern Components**:
 
 - **workload.bicep**: Infrastructure as Code defining Azure resources
-- **workload.yml**: Pipeline configuration and deployment orchestration
+- **deployment-pattern.yml**: Pipeline configuration and deployment orchestration
 
 **Pattern Features**:
 
@@ -187,7 +187,7 @@ Each environment defines specific configuration:
 # vars-development.yml
 variables:
   environmentAbbreviation: dev
-  workloadLocation: westeurope
+  deploymentLocation: westeurope
 ```
 
 ### Pipeline Orchestration
@@ -275,7 +275,7 @@ environments:
 
 1. **Choose Pattern**: Select appropriate pattern from `release-engine-pattern-template`
 2. **Configure Infrastructure**: Customize `workload.bicep` for specific resources
-3. **Set Pipeline Logic**: Adjust `workload.yml` for deployment orchestration
+3. **Set Pipeline Logic**: Adjust `deployment-pattern.yml` for deployment orchestration
 4. **Create Configuration**: Set up simple configuration in dedicated configuration repository
 
 ### Configuration Repository Setup
@@ -336,11 +336,23 @@ resources:
 ```yaml
 # Configuration extends pattern template
 extends:
-  template: /patterns/multi_stage_pattern/workload.yml@workload
+  template: /patterns/multi_stage_pattern/deployment-pattern.yml@workload
   parameters:
-    platformWorkloadSettings:
+    deploymentSettings:
       configurationFilePath: /_config
       environments: [development, test, production]
+```
+
+Optional: When running a pipeline from inside the `release-engine-core` repository for internal testing, set the context to `internal` so template paths resolve correctly:
+
+```yaml
+extends:
+  template: /patterns/multi_stage_pattern/deployment-pattern.yml@workload
+  parameters:
+    deploymentSettings:
+      configurationFilePath: /_config
+      environments: [development, test, production]
+      configurationPipelineContext: internal  # options: internal | external (default)
 ```
 
 ### Dynamic Stage Generation
@@ -548,7 +560,7 @@ The following repositories demonstrate real-world implementations using the Rele
 When customizing the workload pattern template:
 
 1. **Pattern Structure**: Maintain the `/patterns/[pattern-name]/` structure
-2. **Required Files**: Always include `workload.bicep` and `workload.yml`
+2. **Required Files**: Always include `workload.bicep` and `deployment-pattern.yml`
 3. **Naming Convention**: Use descriptive pattern names (e.g., `webapp_with_database`)
 4. **Documentation**: Include README.md for each pattern explaining usage
 5. **Parameters**: Use consistent parameter naming across patterns

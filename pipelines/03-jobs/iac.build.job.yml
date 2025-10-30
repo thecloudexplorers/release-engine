@@ -1,0 +1,107 @@
+parameters:
+  - name: patternSettings
+    type: object
+
+jobs:
+  - job: ${{ variables.deploymentPattern }}_build
+    displayName: Building IaC Artifacts
+    variables:
+
+      - name: configurationCheckoutDirectory
+        value: configurationCheckoutDirectory
+
+
+      - ${{ if and(eq(parameters.patternSettings.patternContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+          - name: patternCheckoutDirectory
+            value: configurationCheckoutDirectory
+      - ${{ elseif and(eq(parameters.patternSettings.patternContext,'internal'), ne(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+          - name: patternCheckoutDirectory
+            value: releaseEngineCheckoutDirectory
+      - ${{ elseif and(ne(parameters.patternSettings.patternContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
+          - name: patternCheckoutDirectory
+            value: configurationCheckoutDirectory
+      - ${{ else }}:
+          - name: patternCheckoutDirectory
+            value: patternCheckoutDirectory    
+
+
+      - ${{ if eq(parameters.patternSettings.configurationPipelineContext,'internal') }}:
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml
+          - name: releaseEngineCheckoutDirectory
+            value: configurationCheckoutDirectory
+          
+
+      - ${{ else }}:
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml@self
+          - name: releaseEngineCheckoutDirectory
+            value: releaseEngineCheckoutDirectory            
+          
+      
+    steps:
+
+      - checkout: self
+        path: configurationCheckoutDirectory
+      
+      - ${{ if ne(parameters.patternSettings.patternContext,'internal') }}:
+          - checkout: workload
+            path: patternCheckoutDirectory
+      - ${{ if ne(parameters.patternSettings.configurationPipelineContext,'internal') }}:
+          - checkout: release-engine-core
+            path: releaseEngineCheckoutDirectory          
+
+      - powershell: |
+          # Shows all configurations for debugging purposes of patternSettings          
+          Write-Host "\nParameters:"
+          Write-Host '${{ convertToJson(parameters) }}'
+          Write-Host "\nVariables:"
+          Get-ChildItem env:
+
+          tree /F $(Pipeline.Workspace)
+        displayName: Debug - Display Settings and Environment Variables
+        condition: eq( variables['System.Debug'], 'true' )
+
+      - task: CopyFiles@2
+        displayName: Copying content from Configuration repository
+        inputs:
+          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.patternSettings.configurationFilePath }}
+          Contents: |
+            **
+            !pipelines/**
+          TargetFolder: $(build.artifactstagingdirectory)/$(deploymentPattern)/configuration
+          flattenFolders: false
+
+      - task: CopyFiles@2
+        displayName: Copying Deployment Pattern content
+        inputs:
+          SourceFolder: $(Pipeline.Workspace)/$(patternCheckoutDirectory)/${{ parameters.patternSettings.patternArtifactsPath }}
+          Contents: |
+            **
+            !tests/**
+            !examples/**
+            !deployment-pattern.yml
+          TargetFolder: $(build.artifactstagingdirectory)/$(deploymentPattern)
+          flattenFolders: false
+
+      - task: CopyFiles@2
+        displayName: Copying common content
+        inputs:
+          SourceFolder: $(Pipeline.Workspace)/$(releaseEngineCheckoutDirectory)/common
+          Contents: |
+            **
+            !tests/**
+            !examples/**
+            !pipelines/**
+          TargetFolder: $(build.artifactstagingdirectory)/common
+          flattenFolders: false
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(build.artifactstagingdirectory)/$(deploymentPattern)
+          artifact: $(deploymentPattern)
+          publishLocation: pipeline
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(build.artifactstagingdirectory)/common
+          artifact: common
+          publishLocation: pipeline
