@@ -11,6 +11,9 @@ extends:
   parameters:
     platformWorkloadSettings:
       configurationFilePath: /patterns/templates/iac/resource_group_scope_pattern/tests/_config
+      # Indicates if this is an integrated pipeline running inside release-engine-core repo
+      # Options: "internal" | "external" | "" (empty string)
+      configurationPipelineContext: "internal"   
 
       environments:
         - name: development

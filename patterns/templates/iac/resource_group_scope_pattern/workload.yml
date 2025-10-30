@@ -17,7 +17,11 @@ stages:
         configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
         environments: ${{ parameters.platformWorkloadSettings.environments }}
         workloadArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern
-        # repository: release-engine-core
+        # Indicates if this is an builtin pattern in the release-engine-core repo
+        # Options: "internal" | "external" | "" (empty string)
+        workloadContext: internal
+        configurationPipelineContext: ${{ parameters.platformWorkloadSettings.configurationPipelineContext }}
+        
         stages:
           - infrastructure:
               iac:
