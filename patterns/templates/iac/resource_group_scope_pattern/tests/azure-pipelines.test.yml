@@ -1,8 +1,12 @@
 name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
-  - main
-  - users/*
+  branches:
+    include:
+      - users/*
+  paths:
+    include:
+      - patterns/templates/iac/multi_stage_pattern/**
 
 pool: MSHosted-WorkloadsPool
 
