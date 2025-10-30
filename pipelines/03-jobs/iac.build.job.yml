@@ -36,11 +36,11 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if eq(parameters.workloadSettings.workloadContext,'internal') }}:        
+      # - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
+      - ${{ if ne(parameters.workloadSettings.workloadContext,'internal') }}:
           - checkout: workload
             path: workloadCheckoutDirectory
-
-      - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
+      - ${{ if ne(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
           - checkout: release-engine-core
             path: releaseEngineCheckoutDirectory          
 
