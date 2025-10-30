@@ -9,7 +9,12 @@ jobs:
     displayName: Azure Deployment
     environment: ${{ parameters.jobSettings.environment }}
     variables:
-      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+
+      - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:          
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+
+      - ${{ else }}:          
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self      
       
       - name: workloadArtifactsDirectory        
         value: $(Pipeline.Workspace)/$(workload)/      
