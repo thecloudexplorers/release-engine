@@ -32,7 +32,7 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:          
+      - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
           - checkout: release-engine-core
             path: releaseEngineCheckoutDirectory          
           - checkout: workload
