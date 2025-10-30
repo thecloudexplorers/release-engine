@@ -48,8 +48,7 @@ jobs:
             path: releaseEngineCheckoutDirectory          
 
       - powershell: |
-          # Shows all configurations for debugging purposes of workloadSettings
-          Write-Host "Service Connection: '${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}' "
+          # Shows all configurations for debugging purposes of workloadSettings          
           Write-Host "\nParameters:"
           Write-Host '${{ convertToJson(parameters) }}'
           Write-Host "\nVariables:"
