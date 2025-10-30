@@ -7,10 +7,10 @@ trigger:
 pool: MSHosted-WorkloadsPool
 
 extends:
-  template: /patterns/iac/resource_group_scope_pattern/workload.yml
+  template: /patterns/templates/iac/resource_group_scope_pattern/workload.yml
   parameters:
     platformWorkloadSettings:
-      configurationFilePath: /patterns/iac/resource_group_scope_pattern/tests/_config
+      configurationFilePath: /patterns/templates/iac/resource_group_scope_pattern/tests/_config
 
       environments:
         - name: development

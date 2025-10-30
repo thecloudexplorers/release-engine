@@ -46,4 +46,4 @@ stages:
             Write-Host '${{ convertToJson(parameters) }}'
             Write-Host "\nVariables:"
             Get-ChildItem env:
-          displayName: Debug - Display Settings and Environment Variables                
+          displayName: Debug - Display Settings and Environment Variables
