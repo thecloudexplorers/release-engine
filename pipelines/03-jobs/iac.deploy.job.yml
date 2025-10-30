@@ -1,5 +1,5 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
   - name: jobSettings
     type: object
@@ -9,24 +9,31 @@ jobs:
     displayName: Azure Deployment
     environment: ${{ parameters.jobSettings.environment }}
     variables:
-      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+
+      - ${{ if eq(parameters.patternSettings.configurationPipelineContext,'internal') }}:          
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml
+
+      - ${{ else }}:          
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml@self      
       
-      - name: workloadArtifactsDirectory        
-        value: $(Pipeline.Workspace)/$(workload)/      
+      - name: patternArtifactsDirectory        
+        value: $(Pipeline.Workspace)/$(deploymentPattern)/      
       - name: iacMainFilePath
-        value: $(workloadArtifactsDirectory)/${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
+        value: $(patternArtifactsDirectory)/${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
 
     strategy:
       runOnce:
         deploy:
           steps:
             - powershell: |
-                # Shows all configurations for debugging purposes of workloadSettings
+                # Shows all configurations for debugging purposes of patternSettings
                 Write-Host "Service Connection: '${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}' "
                 Write-Host "\nParameters:"
                 Write-Host '${{ convertToJson(parameters) }}'
                 Write-Host "\nVariables:"
                 Get-ChildItem env:
+
+                tree /F $(Pipeline.Workspace)
               displayName: Debug - Display Settings and Environment Variables
               condition: eq( variables['System.Debug'], 'true' )
            
@@ -39,7 +46,7 @@ jobs:
                 pwsh: true
                 filePath: $(Pipeline.Workspace)/common/scripts/Replace-ConfigurationFilesTokens.ps1                
                 arguments: |
-                  -ConfigFilesRootFolder '$(workloadArtifactsDirectory)/configuration'
+                  -ConfigFilesRootFolder '$(patternArtifactsDirectory)/configuration'
 
             # Runs pre deployment powershell scripts
             - ${{ if ne(parameters.jobSettings.stage.infrastructure.preDeploymentScripts, '') }}:
@@ -51,7 +58,7 @@ jobs:
                         pwsh: true
                         azureSubscription: ${{ script.serviceConnection }}
                         ScriptType: FilePath
-                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        ScriptPath: $(patternArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
                         azurePowerShellVersion: LatestVersion
                         ScriptArguments: ${{ script.arguments }}
                         workingDirectory: $(Pipeline.Workspace)
@@ -64,12 +71,12 @@ jobs:
                   inputs:
                     deploymentScope: ${{ parameters.jobSettings.stage.infrastructure.iac.deploymentScope }}
                     azureResourceManagerConnection: ${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}
-                    location: $(workloadLocation)
+                    location: $(deploymentLocation)
                     templateLocation: "Linked artifact"
                     csmFile: $(iacMainFilePath)
                     # TODO: For each stage provide the specific configuration if multiple IaC per stage
 
-                    csmParametersFile: $(workloadArtifactsDirectory)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
+                    csmParametersFile: $(patternArtifactsDirectory)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
                     overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
                     deploymentMode: Incremental
                     deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
@@ -88,7 +95,7 @@ jobs:
                         pwsh: true
                         azureSubscription: ${{ script.serviceConnection }}
                         ScriptType: FilePath
-                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        ScriptPath: $(patternArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
                         azurePowerShellVersion: LatestVersion
                         ScriptArguments: ${{ script.arguments }}
                         workingDirectory: $(Pipeline.Workspace)

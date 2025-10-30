@@ -13,7 +13,7 @@ This document provides step-by-step instructions for creating new patterns based
 2. **Required Files**
    - Each pattern must include the following files:
      - `workload.bicep`: Defines the infrastructure and resources for the pattern.
-     - `workload.yml`: Configures the pipeline and deployment settings.
+     - `deployment-pattern.yml`: Configures the pipeline and deployment settings.
 
 3. **Creating `workload.bicep`**
 
@@ -55,13 +55,13 @@ This document provides step-by-step instructions for creating new patterns based
    - Update the `metadata` section with the version, author, and description.
    - Define parameters and modules specific to your workload.
 
-4. **Creating `workload.yml`**
+4. **Creating `deployment-pattern.yml`**
 
    Use the following template as a starting point:
 
    ```yaml
    parameters:
-     - name: platformWorkloadSettings
+     - name: deploymentSettings
        type: object
 
    variables:
@@ -69,13 +69,13 @@ This document provides step-by-step instructions for creating new patterns based
        value: <default-service-connection>
 
    stages:
-     - template: /common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml@release-engine-core
+     - template: /pipelines/01-orchestrators/pattern.orchestrator.yml@release-engine-core
        parameters:
-         workloadSettings:
+         patternSettings:
            name: <new_pattern_name>
-           configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
+           configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
            workloadDefinitionRepositoryName: release-engine-pattern-template
-           environments: ${{ parameters.platformWorkloadSettings.environments }}
+           environments: ${{ parameters.deploymentSettings.environments }}
            workloadArtifactsPath: /patterns/<new_pattern_name>
            stages:
              - infrastructure:
@@ -84,18 +84,39 @@ This document provides step-by-step instructions for creating new patterns based
                    deploymentScope: Subscription
                    serviceConnection: $(serviceConnection)
                    iacMainFileName: workload.bicep
-                   iacParameterFileName: ${{ parameters.platformWorkloadSettings.iacParameterFileName }}
+                   iacParameterFileName: ${{ parameters.deploymentSettings.iacParameterFileName }}
                    iacParameterFilesDirectory: /iac/
    ```
 
    - Replace `<new_pattern_name>` with the name of your pattern.
    - Update the `serviceConnection` variable with the appropriate service connection for your environment.
+   - Save this file as `deployment-pattern.yml` inside your pattern folder.
+   - When referencing this pattern from a pipeline, extend it like:
+     
+     ```yaml
+     extends:
+       template: /patterns/<new_pattern_name>/deployment-pattern.yml@workload
+       parameters:
+         deploymentSettings:
+           configurationFilePath: /_config
+           environments: [development, test, production]
+     ```
+
+   - New: You can optionally pass `configurationPipelineContext` in `deploymentSettings` to indicate where the extending pipeline runs from:
+     
+     ```yaml
+     parameters:
+       deploymentSettings:
+         configurationPipelineContext: "internal"  # options: "internal" | "external" (default: external)
+     ```
 
 5. **Testing the Pattern**
-   - Validate the `workload.bicep` file using Azure Bicep tools.
-   - Test the pipeline configuration in a development environment.
 
-6. **Documentation**
+- Validate the `workload.bicep` file using Azure Bicep tools.
+- Test the pipeline configuration in a development environment.
+- If testing inside the `release-engine-core` repository, set `configurationPipelineContext: "internal"` in your test pipeline. For external repositories, omit it or set to `"external"`.
+
+1. **Documentation**
    - Document the purpose and usage of the pattern in a `README.md` file within the pattern folder.
    - Include details about required parameters, deployment steps, and any dependencies.
 

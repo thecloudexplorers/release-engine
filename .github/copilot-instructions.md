@@ -4,7 +4,7 @@
 
 ### Pipeline Structure
 
-- `/common/pipelines/` - Core reusable pipeline components
+- `/pipelines/` - Core reusable pipeline components
   - `01-orchestrators/` - High-level pipeline orchestration templates
   - `02-stages/` - Reusable deployment stages (build, deploy)
   - `03-jobs/` - Individual job definitions
@@ -26,7 +26,7 @@
 2. Configuration follows this structure:
 
 ```yaml
-workloadSettings:
+patternSettings:
   configurationFilePath: /path/to/config
   environments: [env-names]
   deploymentScript:
@@ -116,7 +116,7 @@ workloadSettings:
 
 ## Best Practices
 
-1. Use standardized stage templates from `/common/pipelines/02-stages/`
+1. Use standardized stage templates from `/pipelines/02-stages/`
 2. Follow the environment configuration pattern in `_config/` (dev-vars.yml, prd-vars.yml)
 3. Implement PowerShell scripts following patterns in `/common/scripts/functions/`
 4. Document architectural decisions in `/docs/adrs/`
