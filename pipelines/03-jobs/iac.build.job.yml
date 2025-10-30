@@ -12,17 +12,17 @@ jobs:
 
 
       - ${{ if and(eq(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
-          - name: workloadCheckoutDirectory
+          - name: patternCheckoutDirectory
             value: configurationCheckoutDirectory
       - ${{ elseif and(eq(parameters.patternSettings.workloadContext,'internal'), ne(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
-          - name: workloadCheckoutDirectory
+          - name: patternCheckoutDirectory
             value: releaseEngineCheckoutDirectory
       - ${{ elseif and(ne(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
-          - name: workloadCheckoutDirectory
+          - name: patternCheckoutDirectory
             value: configurationCheckoutDirectory
       - ${{ else }}:
-          - name: workloadCheckoutDirectory
-            value: workloadCheckoutDirectory    
+          - name: patternCheckoutDirectory
+            value: patternCheckoutDirectory    
 
 
       - ${{ if eq(parameters.patternSettings.configurationPipelineContext,'internal') }}:
@@ -44,7 +44,7 @@ jobs:
       
       - ${{ if ne(parameters.patternSettings.workloadContext,'internal') }}:
           - checkout: workload
-            path: workloadCheckoutDirectory
+            path: patternCheckoutDirectory
       - ${{ if ne(parameters.patternSettings.configurationPipelineContext,'internal') }}:
           - checkout: release-engine-core
             path: releaseEngineCheckoutDirectory          
@@ -73,7 +73,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/$(workloadCheckoutDirectory)/${{ parameters.patternSettings.patternArtifactsPath }}
+          SourceFolder: $(Pipeline.Workspace)/$(patternCheckoutDirectory)/${{ parameters.patternSettings.patternArtifactsPath }}
           Contents: |
             **
             !tests/**
