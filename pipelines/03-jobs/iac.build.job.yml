@@ -13,20 +13,25 @@ jobs:
       # - name: workloadCheckoutDirectory
       #   value: workloadCheckoutDirectory
 
-      - ${{ if eq(parameters.workloadSettings.workloadContext,'internal') }}:
+      - ${{ if and(eq(parameters.workloadSettings.workloadContext,'internal'), eq(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
           - name: workloadCheckoutDirectory
             value: releaseEngineCheckoutDirectory
+      - ${{ elseif and(eq(parameters.workloadSettings.workloadContext,'internal'), ne(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
+          - name: workloadCheckoutDirectory
+            value: releaseEngineCheckoutDirectory
+      - ${{ elseif and(ne(parameters.workloadSettings.workloadContext,'internal'), eq(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
+          - name: workloadCheckoutDirectory
+            value: configurationCheckoutDirectory
+      - ${{ else }}:
+          - name: workloadCheckoutDirectory
+            value: workloadCheckoutDirectory  
 
-      # - ${{ else }}:
-      #     - name: workloadCheckoutDirectory
-      #       value: workloadCheckoutDirectory
-
-          - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:      
-              - name: workloadCheckoutDirectory
-                value: workloadCheckoutDirectory
-          - ${{ else }}:
-              - name: workloadCheckoutDirectory
-                value: configurationCheckoutDirectory      
+          # - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:    
+          #     - name: workloadCheckoutDirectory
+          #       value: releaseEngineCheckoutDirectory
+          # - ${{ else }}:
+          #     - name: workloadCheckoutDirectory
+          #       value: configurationCheckoutDirectory      
 
 
 
