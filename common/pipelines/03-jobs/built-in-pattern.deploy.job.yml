@@ -29,7 +29,7 @@ jobs:
                 Get-ChildItem env:
                 
                 Write-Host "`nWorkspace Files:"
-                Get-ChildItem -Recurse $(Pipeline.Workspace)
+                tree /F $(Pipeline.Workspace)
               displayName: Debug - Display Settings and Environment Variables
               condition: eq( variables['System.Debug'], 'true' )
            
