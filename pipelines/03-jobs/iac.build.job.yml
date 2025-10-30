@@ -3,7 +3,7 @@ parameters:
     type: object
 
 jobs:
-  - job: ${{ variables.workload }}_build
+  - job: ${{ variables.deploymentPattern }}_build
     displayName: Building IaC Artifacts
     variables:
 
@@ -79,7 +79,7 @@ jobs:
             !tests/**
             !examples/**
             !workload.yml
-          TargetFolder: $(build.artifactstagingdirectory)/$(workload)
+          TargetFolder: $(build.artifactstagingdirectory)/$(deploymentPattern)
           flattenFolders: false
 
       - task: CopyFiles@2
@@ -96,8 +96,8 @@ jobs:
 
       - task: PublishPipelineArtifact@1
         inputs:
-          targetPath: $(build.artifactstagingdirectory)/$(workload)
-          artifact: $(workload)
+          targetPath: $(build.artifactstagingdirectory)/$(deploymentPattern)
+          artifact: $(deploymentPattern)
           publishLocation: pipeline
 
       - task: PublishPipelineArtifact@1

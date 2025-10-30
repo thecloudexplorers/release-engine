@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "resourceLocation": {
-      "value": "#{deployment_location}#"
+      "value": "#{deploymentLocation}#"
     },
     "storageAccountName": {
       "value": "#{applicationAbbreviation}##{environmentAbbreviation}#st004"
