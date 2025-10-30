@@ -1,0 +1,25 @@
+name: $(Build.DefinitionName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - main
+  - users/*
+
+pool: MSHosted-WorkloadsPool
+
+extends:
+  template: /patterns/iac/resource_group_scope_pattern/workload.yml
+  parameters:
+    platformWorkloadSettings:
+      configurationFilePath: /patterns/iac/resource_group_scope_pattern/tests/_config
+
+      environments:
+        - name: development
+          dependsOn: build
+          displayName: Dev
+          afterBuild: true          
+        - name: test
+          dependsOn: development
+          displayName: Test
+        - name: production
+          dependsOn: test
+          displayName: Prod
