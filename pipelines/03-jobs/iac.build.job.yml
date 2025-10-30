@@ -67,11 +67,11 @@ jobs:
           Contents: |
             **
             !pipelines/**
-          TargetFolder: $(build.artifactstagingdirectory)/$(workload)/configuration
+          TargetFolder: $(build.artifactstagingdirectory)/$(deploymentPattern)/configuration
           flattenFolders: false
 
       - task: CopyFiles@2
-        displayName: Copying Workload content
+        displayName: Copying Deployment Pattern content
         inputs:
           SourceFolder: $(Pipeline.Workspace)/$(patternCheckoutDirectory)/${{ parameters.patternSettings.patternArtifactsPath }}
           Contents: |
