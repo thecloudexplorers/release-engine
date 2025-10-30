@@ -6,8 +6,9 @@ jobs:
   - job: ${{ variables.workload }}_build
     displayName: Building IaC Artifacts
     variables:
-      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
-      
+
+      - name: configurationCheckoutDirectory
+        value: configurationCheckoutDirectory
 
       - ${{ if eq(parameters.workloadSettings.workloadContext,'internal') }}:
           - name: workloadCheckoutDirectory
@@ -20,11 +21,13 @@ jobs:
       - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
           - name: releaseEngineCheckoutDirectory
             value: configurationCheckoutDirectory
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
 
       - ${{ else }}:
           - name: releaseEngineCheckoutDirectory
-            value: releaseEngineCheckoutDirectory
-
+            value: releaseEngineCheckoutDirectory            
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@release-engine-core
+      
     steps:
       # - checkout: self
       #   path: configurationCheckoutDirectory
@@ -34,7 +37,7 @@ jobs:
       #   path: workloadCheckoutDirectory
 
       - checkout: self
-        path: configurationCheckoutDirectory
+        path: $(configurationCheckoutDirectory)
       
       # - ${{ if ne(coalesce(parameters.workloadSettings.repository,''), '') }}:
       - ${{ if ne(parameters.workloadSettings.workloadContext,'internal') }}:
@@ -47,7 +50,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.workloadSettings.configurationFilePath }}
+          SourceFolder: $(Pipeline.Workspace)/$(configurationCheckoutDirectory)/${{ parameters.workloadSettings.configurationFilePath }}
           Contents: |
             **
             !pipelines/**
