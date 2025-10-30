@@ -26,7 +26,7 @@ jobs:
       - ${{ else }}:
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory            
-          # - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
       
     steps:
       # - checkout: self
