@@ -16,7 +16,7 @@ stages:
         name: resource_group_scope_pattern
         configurationFilePath: ${{ parameters.platformWorkloadSettings.configurationFilePath }}
         environments: ${{ parameters.platformWorkloadSettings.environments }}
-        workloadArtifactsPath: /patterns/iac/resource_group_scope_pattern
+        workloadArtifactsPath: /patterns/templates/iac/resource_group_scope_pattern
         # repository: release-engine-core
         stages:
           - infrastructure:
