@@ -71,7 +71,7 @@ jobs:
                   inputs:
                     deploymentScope: ${{ parameters.jobSettings.stage.infrastructure.iac.deploymentScope }}
                     azureResourceManagerConnection: ${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}
-                    location: $(workloadLocation)
+                    location: $(deploymentLocation)
                     templateLocation: "Linked artifact"
                     csmFile: $(iacMainFilePath)
                     # TODO: For each stage provide the specific configuration if multiple IaC per stage

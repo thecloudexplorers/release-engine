@@ -1,6 +1,6 @@
 variables:
   environmentAbbreviation: dev
-  workloadLocation: westeurope
+  deploymentLocation: westeurope
   
   # Required for resource group scoped deployments
   # subscriptionId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
