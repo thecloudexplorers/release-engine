@@ -51,7 +51,33 @@ graph TB
 
 ## Pipeline Configuration
 
+### Using the Pattern Template
+
+To use this pattern in a pipeline, extend the template from your configuration repository:
+
+```yaml
+extends:
+  template: /patterns/templates/iac/resource_group_scope_pattern/deployment-pattern.yml@workload
+  parameters:
+    deploymentSettings:
+      configurationFilePath: /_config
+      environments: [development, test, production]
+```
+
+When testing inside the `release-engine-core` repository (internal pipelines), set the context explicitly to ensure paths resolve correctly:
+
+```yaml
+extends:
+  template: /patterns/templates/iac/resource_group_scope_pattern/deployment-pattern.yml@workload
+  parameters:
+    deploymentSettings:
+      configurationFilePath: /_config
+      environments: [development, test, production]
+      configurationPipelineContext: internal  # options: internal | external (default)
+```
+
 ### Stage Configuration
+
 ```yaml
 stages:
   - infrastructure:

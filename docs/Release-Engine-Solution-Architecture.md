@@ -343,6 +343,18 @@ extends:
       environments: [development, test, production]
 ```
 
+Optional: When running a pipeline from inside the `release-engine-core` repository for internal testing, set the context to `internal` so template paths resolve correctly:
+
+```yaml
+extends:
+  template: /patterns/multi_stage_pattern/deployment-pattern.yml@workload
+  parameters:
+    deploymentSettings:
+      configurationFilePath: /_config
+      environments: [development, test, production]
+      configurationPipelineContext: internal  # options: internal | external (default)
+```
+
 ### Dynamic Stage Generation
 
 The orchestrator dynamically generates deployment stages based on:
