@@ -10,7 +10,7 @@ variables:
     value: IacServiceConnection 
 
 stages:
-  - template: /common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml
+  - template: /pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml
     parameters:
       workloadSettings:
         name: resource_group_scope_pattern

@@ -215,13 +215,13 @@ graph TD
 
 | Component | Purpose | Technology | Location |
 |-----------|---------|------------|----------|
-| **Orchestrator** | Main pipeline coordination | Azure DevOps YAML | `/common/pipelines/01-orchestrators/` |
-| **Build Stage** | Infrastructure validation and build | Azure DevOps YAML | `/common/pipelines/02-stages/iac.build.stage.yml` |
-| **Deploy Stage** | Multi-environment deployment | Azure DevOps YAML | `/common/pipelines/02-stages/iac.deploy.stage.yml` |
+| **Orchestrator** | Main pipeline coordination | Azure DevOps YAML | `/pipelines/01-orchestrators/` |
+| **Build Stage** | Infrastructure validation and build | Azure DevOps YAML | `/pipelines/02-stages/iac.build.stage.yml` |
+| **Deploy Stage** | Multi-environment deployment | Azure DevOps YAML | `/pipelines/02-stages/iac.deploy.stage.yml` |
 | **Token Replacement** | Configuration parameterization | PowerShell | `/common/scripts/Replace-ConfigurationFilesTokens.ps1` |
 
 **Evidence**: 
-- release-engine-core/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
+- release-engine-core/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
 
 #### 4.3.2 Pattern Layer Components
 
@@ -446,7 +446,7 @@ graph LR
 
 #### 7.1.2 Quality Gates
 
-**Evidence**: release-engine/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
+**Evidence**: release-engine/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L1-L20
 
 The orchestrator coordinates build and deployment stages with dependency management.
 
@@ -471,7 +471,7 @@ metadata resources = {
 
 #### 7.3.1 Pipeline Monitoring
 
-**Evidence**: release-engine/common/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L12-L23
+**Evidence**: release-engine/pipelines/01-orchestrators/alz.devops.workload.orchestrator.yml#L12-L23
 
 Debug capabilities are built into the orchestrator for troubleshooting.
 

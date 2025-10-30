@@ -8,7 +8,7 @@ stages:
       displayName: 'Build - ${{ stage.infrastructure.iac.displayName }}'
       dependsOn:
       jobs:
-        - template: /common/pipelines/03-jobs/iac.build.job.yml
+        - template: /pipelines/03-jobs/iac.build.job.yml
           parameters:
             workloadSettings: ${{ parameters.workloadSettings }}
             

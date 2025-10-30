@@ -46,10 +46,10 @@ graph TD
 
 #### Pipeline Structure
 
-- `/common/pipelines/01-orchestrators/` - High-level pipeline orchestration templates
-- `/common/pipelines/02-stages/` - Reusable deployment stages (build, deploy)
-- `/common/pipelines/03-jobs/` - Individual job definitions
-- `/common/pipelines/04-steps/` - Atomic pipeline steps
+- `/pipelines/01-orchestrators/` - High-level pipeline orchestration templates
+- `/pipelines/02-stages/` - Reusable deployment stages (build, deploy)
+- `/pipelines/03-jobs/` - Individual job definitions
+- `/pipelines/04-steps/` - Atomic pipeline steps
 
 #### Scripts and Functions
 
