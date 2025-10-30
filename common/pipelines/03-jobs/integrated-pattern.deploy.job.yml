@@ -1,0 +1,94 @@
+parameters:
+  - name: workloadSettings
+    type: object
+  - name: jobSettings
+    type: object
+
+jobs:
+  - deployment: workload_deployment_${{ parameters.jobSettings.environment }}
+    displayName: Azure Deployment
+    environment: ${{ parameters.jobSettings.environment }}
+    variables:
+      - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+      
+      - name: workloadArtifactsDirectory        
+        value: $(Pipeline.Workspace)/$(workload)/      
+      - name: iacMainFilePath
+        value: $(workloadArtifactsDirectory)/${{ parameters.jobSettings.stage.infrastructure.iac.iacMainFileName }}
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - powershell: |
+                # Shows all configurations for debugging purposes of workloadSettings
+                Write-Host "Service Connection: '${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}' "
+                Write-Host "\nParameters:"
+                Write-Host '${{ convertToJson(parameters) }}'
+                Write-Host "\nVariables:"
+                Get-ChildItem env:
+              displayName: Debug - Display Settings and Environment Variables
+              condition: eq( variables['System.Debug'], 'true' )
+           
+            - task: PowerShell@2 #TODO: Move to dedicated task
+              displayName: Replace Config Tokens
+              inputs:
+                targetType: filePath
+                failOnStderr: true
+                showWarnings: true
+                pwsh: true
+                filePath: $(Pipeline.Workspace)/common/scripts/Replace-ConfigurationFilesTokens.ps1                
+                arguments: |
+                  -ConfigFilesRootFolder '$(workloadArtifactsDirectory)/configuration'
+
+            # Runs pre deployment powershell scripts
+            - ${{ if ne(parameters.jobSettings.stage.infrastructure.preDeploymentScripts, '') }}:
+                - ${{ each script in parameters.jobSettings.stage.infrastructure.preDeploymentScripts }}:
+                    - task: AzurePowerShell@5
+                      name: ${{ script.name }}
+                      displayName: Running script ${{ script.name }}
+                      inputs:
+                        pwsh: true
+                        azureSubscription: ${{ script.serviceConnection }}
+                        ScriptType: FilePath
+                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        azurePowerShellVersion: LatestVersion
+                        ScriptArguments: ${{ script.arguments }}
+                        workingDirectory: $(Pipeline.Workspace)
+
+            #TODO: Iterate for multi iac
+            #IaC deployment
+            - ${{ if and(ne(parameters.jobSettings.stage.infrastructure.iac, ''), not(parameters.jobSettings.stage.infrastructure.iac.disabled)) }}:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  condition:
+                  inputs:
+                    deploymentScope: ${{ parameters.jobSettings.stage.infrastructure.iac.deploymentScope }}
+                    azureResourceManagerConnection: ${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}
+                    location: $(workloadLocation)
+                    templateLocation: "Linked artifact"
+                    csmFile: $(iacMainFilePath)
+                    # TODO: For each stage provide the specific configuration if multiple IaC per stage
+
+                    csmParametersFile: $(workloadArtifactsDirectory)/configuration/${{ parameters.jobSettings.stage.infrastructure.iac.iacParameterFileName }}
+                    overrideParameters: ${{ parameters.jobSettings.stage.infrastructure.iac.customBicepParameters }}
+                    deploymentMode: Incremental
+                    deploymentName: ${{ parameters.jobSettings.stage.infrastructure.iac.name }}-$(Build.BuildId)
+                    deploymentOutputs: deploymentOutputs
+                    ${{ if eq(parameters.jobSettings.stage.infrastructure.iac.deploymentScope, 'ResourceGroup') }}:
+                      resourceGroupName: ${{ parameters.jobSettings.stage.infrastructure.iac.resourceGroupName }}
+                      subscriptionId: ${{ parameters.jobSettings.stage.infrastructure.iac.subscriptionId }}
+
+            # Runs post deployment powershell scripts
+            - ${{ if ne(parameters.jobSettings.stage.infrastructure.postDeploymentScripts, '') }}:
+                - ${{ each script in parameters.jobSettings.stage.infrastructure.postDeploymentScripts }}:
+                    - task: AzurePowerShell@5
+                      name: ${{ script.name }}
+                      displayName: Running script ${{ script.name }}
+                      inputs:
+                        pwsh: true
+                        azureSubscription: ${{ script.serviceConnection }}
+                        ScriptType: FilePath
+                        ScriptPath: $(workloadArtifactsDirectory)/scripts/${{ script.name }}.${{ script.scriptExtension }}
+                        azurePowerShellVersion: LatestVersion
+                        ScriptArguments: ${{ script.arguments }}
+                        workingDirectory: $(Pipeline.Workspace)

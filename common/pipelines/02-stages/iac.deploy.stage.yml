@@ -52,11 +52,18 @@ stages:
                   - ${{ env.name }}_${{ stage.infrastructure.iac.dependsOn }}
 
             jobs:
-              - template: /common/pipelines/03-jobs/iac.deploy.job.yml
-                parameters:
-                  workloadSettings: ${{ parameters.workloadSettings }}                  
-                  jobSettings:
-                    environment: ${{ env.name }}
-                    stage: ${{ stage }}
-                    
+              - ${{ if eq(parameters.workloadSettings.integratedPattern, '') }}:
+                  - template: /common/pipelines/03-jobs/iac.deploy.job.yml
+                    parameters:
+                      workloadSettings: ${{ parameters.workloadSettings }}                  
+                      jobSettings:
+                        environment: ${{ env.name }}
+                        stage: ${{ stage }}
+              - ${{ else }}:
+                  - template: /common/pipelines/03-jobs/integrated-pattern.deploy.job.yml
+                    parameters:
+                      workloadSettings: ${{ parameters.workloadSettings }}                  
+                      jobSettings:
+                        environment: ${{ env.name }}
+                        stage: ${{ stage }}                    
 
