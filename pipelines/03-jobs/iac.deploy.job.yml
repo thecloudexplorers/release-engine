@@ -1,5 +1,5 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
   - name: jobSettings
     type: object
@@ -10,11 +10,11 @@ jobs:
     environment: ${{ parameters.jobSettings.environment }}
     variables:
 
-      - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:          
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+      - ${{ if eq(parameters.patternSettings.configurationPipelineContext,'internal') }}:          
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml
 
       - ${{ else }}:          
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self      
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml@self      
       
       - name: workloadArtifactsDirectory        
         value: $(Pipeline.Workspace)/$(workload)/      
@@ -26,7 +26,7 @@ jobs:
         deploy:
           steps:
             - powershell: |
-                # Shows all configurations for debugging purposes of workloadSettings
+                # Shows all configurations for debugging purposes of patternSettings
                 Write-Host "Service Connection: '${{ parameters.jobSettings.stage.infrastructure.iac.serviceConnection }}' "
                 Write-Host "\nParameters:"
                 Write-Host '${{ convertToJson(parameters) }}'

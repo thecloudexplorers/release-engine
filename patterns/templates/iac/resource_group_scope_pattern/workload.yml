@@ -12,7 +12,7 @@ variables:
 stages:
   - template: /pipelines/01-orchestrators/pattern.orchestrator.yml
     parameters:
-      workloadSettings:
+      patternSettings:
         name: resource_group_scope_pattern
         configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
         environments: ${{ parameters.deploymentSettings.environments }}
@@ -45,7 +45,7 @@ stages:
         displayName: Debug Job
         steps:
         - powershell: |
-            # Shows all configurations for debugging purposes of workloadSettings
+            # Shows all configurations for debugging purposes of patternSettings
             Write-Host "\nParameters:"
             Write-Host '${{ convertToJson(parameters) }}'
             Write-Host "\nVariables:"

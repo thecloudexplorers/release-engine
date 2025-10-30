@@ -1,14 +1,14 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
 
 stages:
-  - ${{ each stage in parameters.workloadSettings.stages }}:
+  - ${{ each stage in parameters.patternSettings.stages }}:
     - stage: build_${{ replace(replace(stage.infrastructure.iac.name, '-', '_'), '.', '_') }}      
       displayName: 'Build - ${{ stage.infrastructure.iac.displayName }}'
       dependsOn:
       jobs:
         - template: /pipelines/03-jobs/iac.build.job.yml
           parameters:
-            workloadSettings: ${{ parameters.workloadSettings }}
+            patternSettings: ${{ parameters.patternSettings }}
             

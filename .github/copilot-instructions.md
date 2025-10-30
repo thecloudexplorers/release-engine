@@ -26,7 +26,7 @@
 2. Configuration follows this structure:
 
 ```yaml
-workloadSettings:
+patternSettings:
   configurationFilePath: /path/to/config
   environments: [env-names]
   deploymentScript:

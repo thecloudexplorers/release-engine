@@ -1,5 +1,5 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
 
 jobs:
@@ -11,13 +11,13 @@ jobs:
         value: configurationCheckoutDirectory
 
 
-      - ${{ if and(eq(parameters.workloadSettings.workloadContext,'internal'), eq(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ if and(eq(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: workloadCheckoutDirectory
             value: configurationCheckoutDirectory
-      - ${{ elseif and(eq(parameters.workloadSettings.workloadContext,'internal'), ne(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ elseif and(eq(parameters.patternSettings.workloadContext,'internal'), ne(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: workloadCheckoutDirectory
             value: releaseEngineCheckoutDirectory
-      - ${{ elseif and(ne(parameters.workloadSettings.workloadContext,'internal'), eq(parameters.workloadSettings.configurationPipelineContext,'internal'))}}:
+      - ${{ elseif and(ne(parameters.patternSettings.workloadContext,'internal'), eq(parameters.patternSettings.configurationPipelineContext,'internal'))}}:
           - name: workloadCheckoutDirectory
             value: configurationCheckoutDirectory
       - ${{ else }}:
@@ -25,14 +25,14 @@ jobs:
             value: workloadCheckoutDirectory    
 
 
-      - ${{ if eq(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml
+      - ${{ if eq(parameters.patternSettings.configurationPipelineContext,'internal') }}:
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml
           - name: releaseEngineCheckoutDirectory
             value: configurationCheckoutDirectory
           
 
       - ${{ else }}:
-          - template: ${{ parameters.workloadSettings.configurationFilePath }}/metadata.yml@self
+          - template: ${{ parameters.patternSettings.configurationFilePath }}/metadata.yml@self
           - name: releaseEngineCheckoutDirectory
             value: releaseEngineCheckoutDirectory            
           
@@ -42,15 +42,15 @@ jobs:
       - checkout: self
         path: configurationCheckoutDirectory
       
-      - ${{ if ne(parameters.workloadSettings.workloadContext,'internal') }}:
+      - ${{ if ne(parameters.patternSettings.workloadContext,'internal') }}:
           - checkout: workload
             path: workloadCheckoutDirectory
-      - ${{ if ne(parameters.workloadSettings.configurationPipelineContext,'internal') }}:
+      - ${{ if ne(parameters.patternSettings.configurationPipelineContext,'internal') }}:
           - checkout: release-engine-core
             path: releaseEngineCheckoutDirectory          
 
       - powershell: |
-          # Shows all configurations for debugging purposes of workloadSettings          
+          # Shows all configurations for debugging purposes of patternSettings          
           Write-Host "\nParameters:"
           Write-Host '${{ convertToJson(parameters) }}'
           Write-Host "\nVariables:"
@@ -63,7 +63,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying content from Configuration repository
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.workloadSettings.configurationFilePath }}
+          SourceFolder: $(Pipeline.Workspace)/configurationCheckoutDirectory/${{ parameters.patternSettings.configurationFilePath }}
           Contents: |
             **
             !pipelines/**
@@ -73,7 +73,7 @@ jobs:
       - task: CopyFiles@2
         displayName: Copying Workload content
         inputs:
-          SourceFolder: $(Pipeline.Workspace)/$(workloadCheckoutDirectory)/${{ parameters.workloadSettings.workloadArtifactsPath }}
+          SourceFolder: $(Pipeline.Workspace)/$(workloadCheckoutDirectory)/${{ parameters.patternSettings.workloadArtifactsPath }}
           Contents: |
             **
             !tests/**

@@ -1,15 +1,15 @@
 parameters:
-  - name: workloadSettings
+  - name: patternSettings
     type: object
 
 stages:
   - template: /pipelines/02-stages/iac.build.stage.yml
     parameters:
-      workloadSettings: ${{ parameters.workloadSettings }}
+      patternSettings: ${{ parameters.patternSettings }}
 
   - template: /pipelines/02-stages/iac.deploy.stage.yml
     parameters:
-      workloadSettings: ${{ parameters.workloadSettings }}
+      patternSettings: ${{ parameters.patternSettings }}
   
   - stage: debug_stage_release_engine
     displayName: Debug - Release Engine
@@ -20,7 +20,7 @@ stages:
         displayName: Debug Job
         steps:
         - powershell: |
-            # Shows all configurations for debugging purposes of workloadSettings
+            # Shows all configurations for debugging purposes of patternSettings
             Write-Host "\nParameters:"
             Write-Host '${{ convertToJson(parameters) }}'
             Write-Host "\nVariables:"

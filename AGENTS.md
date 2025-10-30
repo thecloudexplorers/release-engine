@@ -71,7 +71,7 @@ This document provides step-by-step instructions for creating new patterns based
    stages:
      - template: /pipelines/01-orchestrators/pattern.orchestrator.yml@release-engine-core
        parameters:
-         workloadSettings:
+         patternSettings:
            name: <new_pattern_name>
            configurationFilePath: ${{ parameters.deploymentSettings.configurationFilePath }}
            workloadDefinitionRepositoryName: release-engine-pattern-template
